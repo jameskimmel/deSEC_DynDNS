@@ -3,7 +3,7 @@
 deSEC_DynDNS is a DynDNS for DeSEC.io written in bash.  
 It caches the last set IP and only issues an update command, when the IP changed.
 
-How to use it:
+How to use install it:
 ```bash
 sudo apt install curl
 cd /usr/local/sbin/
@@ -11,12 +11,17 @@ sudo wget https://github.com/jameskimmel/deSEC_DynDNS/blob/main/deSEC_DynDNS.sh
 sudo chmod +x deSEC_DynDNS.sh
 ```
 
-run it 
+edit the domain and the token:
+```bash
+sudo nano deSEC_DynDNS.sh
+```
+
+run the script: 
 ```bash
 sudo ./deSEC_DynDNS.sh
 ```
 
-To set it as a cronjob every 5 minutes:
+to set it as a cronjob every 5 minutes:
 ```bash
 sudo crontab -e
 ```
