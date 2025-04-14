@@ -3,7 +3,7 @@
 deSEC_DynDNS is a DynDNS for DeSEC.io written in bash.  
 It caches the last set IP and only issues an update command, when the IP changed.
 
-How to use install it:
+How to install it:
 ```bash
 sudo apt install curl
 cd /usr/local/sbin/
