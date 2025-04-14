@@ -7,7 +7,7 @@ How to use it:
 ```bash
 sudo apt install curl
 cd /usr/local/sbin/
-sudo wget [https://github.com/23bcc23b-de57-4689-81c1-45a770187aa7](https://github.com/jameskimmel/deSEC_DynDNS/blob/main/deSEC_DynDNS.sh)
+sudo wget https://github.com/jameskimmel/deSEC_DynDNS/blob/main/deSEC_DynDNS.sh
 sudo chmod +x deSEC_DynDNS.sh
 ```
 
