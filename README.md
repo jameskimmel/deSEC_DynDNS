@@ -9,7 +9,7 @@ How to install it:
 ```bash
 sudo apt install curl
 wget https://raw.githubusercontent.com/jameskimmel/deSEC_DynDNS/refs/heads/main/deSEC_DynDNS.sh
-sudo chmod +x deSEC_DynDNS.sh
+chmod +x deSEC_DynDNS.sh
 ```
 
 On deSEC.io, create your auth token. Make sure that you have already created the A and/or AAAA records, since the auth token is not allowed to do that. 
