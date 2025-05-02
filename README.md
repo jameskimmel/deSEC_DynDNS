@@ -1,31 +1,41 @@
 # deSEC_DynDNS
 
 deSEC_DynDNS is a DynDNS for DeSEC.io written in bash.  
-It caches the last set IP and only issues an update command, when the IP changed.
+It only issues an update command, when your IP has changed.
+
+
 
 How to install it:
 ```bash
 sudo apt install curl
-cd /usr/local/sbin/
-sudo wget https://github.com/jameskimmel/deSEC_DynDNS/blob/main/deSEC_DynDNS.sh
+wget https://raw.githubusercontent.com/jameskimmel/deSEC_DynDNS/refs/heads/main/deSEC_DynDNS.sh
 sudo chmod +x deSEC_DynDNS.sh
 ```
 
-edit the domain and the token:
+On deSEC.io, create your auth token. Make sure that you have already created the A and/or AAAA records, since the auth token is not allowed to do that. 
+
+Edit the domain and the token in the script.
 ```bash
-sudo nano deSEC_DynDNS.sh
+nano deSEC_DynDNS.sh
 ```
 
 run the script: 
 ```bash
-sudo ./deSEC_DynDNS.sh
+./deSEC_DynDNS.sh
 ```
 
 to set it as a cronjob every 5 minutes:
 ```bash
-sudo crontab -e
+crontab -e
 ```
-Append at the end of the file:
+
+Append at the end of the file something like this. The sleep function will randomly delay the update up to 5min, to not overwhelm deSEC servers.  
+
+Don't forget the change the path to your home directory.
+
 ```bash
-sudo */5 * * * *  /usr/local/sbin/deSEC_DynDNS.sh > /dev/null
+*/5 * * * *  sleep $(( RANDOM % 300 )); /home/YourUserName/deSEC_DynDNS.sh > /dev/null
 ```
+
+Optionally:
+If you use local DNS overrides like unbound, add @8.8.8.8 or @1.1.1.1 after the dig command. Otherwise your IPs will always differ and the script will do an update.
