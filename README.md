@@ -1,6 +1,6 @@
 # deSEC_DynDNS
 
-deSEC_DynDNS is a DynDNS for DeSEC.io written in bash.  
+deSEC_DynDNS is a DynDNS for deSEC.io written in bash.  
 It only issues an update command when your IP has changed.
 
 
