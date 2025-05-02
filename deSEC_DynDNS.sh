@@ -5,8 +5,8 @@
 
 # Config
 # Insert your domain name and the auth token. You can disable IPv4 or IPv6.
-DOMAIN_NAME="kaserne.salzmann.solutions"
-TOKEN="hNtb6kCBtvtracaC4Rq2qG2fiZin"
+DOMAIN_NAME="yourdomain.com"
+TOKEN="1234"
 ENABLE_IPV4=true
 ENABLE_IPV6=true
 
