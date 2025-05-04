@@ -33,6 +33,8 @@ Append at the end of the file:
 ```
 **Don't forget the change the path to your home directory.**
 
+Hope this works for you! If you have any suggestions, please let me know by opening up an issue.
+
 Optionally:
 If you use local DNS overrides like unbound, add @8.8.8.8 or @1.1.1.1 to your dig command. 
 It should look like this:
