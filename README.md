@@ -1,10 +1,7 @@
 # deSEC_DynDNS
 
-**caution, currently broken, please don't use it**  
 deSEC_DynDNS is a DynDNS for deSEC.io written in bash.  
 It only issues an update command when your IP has changed.
-
-
 
 How to install it:
 ```bash
@@ -31,12 +28,11 @@ crontab -e
 ```
 
 Append at the end of the file: 
-
 ```bash
-*/5 * * * *  sleep $(( RANDOM % 300 )); /home/YourUserName/deSEC_DynDNS.sh > /dev/null
+*/5 * * * * /home/YourUserName/deSEC_DynDNS.sh > /dev/null
 ```
-The sleep function will randomly delay the update up to 5min, to not overwhelm deSEC servers.  
 **Don't forget the change the path to your home directory.**
 
 Optionally:
-If you use local DNS overrides like unbound, add @8.8.8.8 or @1.1.1.1 after the dig command. Otherwise your IPs will always differ and the script will always do an update.
+If you use local DNS overrides like unbound, add @8.8.8.8 or @1.1.1.1 to your dig command. 
+Otherwise your IPs will always differ and the script will always do an needless update.
