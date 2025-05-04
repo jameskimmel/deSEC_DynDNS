@@ -17,12 +17,12 @@ Edit the domain and the token in the script.
 nano deSEC_DynDNS.sh
 ```
 
-run the script: 
+To test your config, run the script: 
 ```bash
 ./deSEC_DynDNS.sh
 ```
 
-to set it as a cronjob every 5 minutes:
+If you want to run it every 5min, creat a cronjob like this:  
 ```bash
 crontab -e
 ```
@@ -35,4 +35,9 @@ Append at the end of the file:
 
 Optionally:
 If you use local DNS overrides like unbound, add @8.8.8.8 or @1.1.1.1 to your dig command. 
+It should look like this:
+```bash
+  DNS_IPV4=$(dig @1.1.1.1 +short "$DOMAIN_NAME" A | head -n 1)
+```
+
 Otherwise your IPs will always differ and the script will always do an needless update.
