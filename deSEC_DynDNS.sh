@@ -14,6 +14,10 @@ ENABLE_IPV6=true
 UPDATE_NEEDED=false
 UPDATE_URL="https://update.dedyn.io/?hostname=$DOMAIN_NAME"
 
+# To not overwhelm deSEC servers all at the same time
+# we add a random delay up to 3min and 59s
+sleep $(( RANDOM % 239 ))  
+
 # Check if IPv4 changed
 if [ "$ENABLE_IPV4" = true ]; then
 IPV4=$(curl -s -4 https://checkipv4.dedyn.io)
