@@ -35,11 +35,11 @@ Append at the end of the file:
 
 Hope this works for you! If you have any suggestions, please let me know by opening up an issue.
 
-Optionally:
-If you use local DNS overrides like unbound, add @8.8.8.8 or @1.1.1.1 to your dig command. 
-It should look like this:
+**If you use DNS overrides:**  
+If you use local DNS overrides like unbound or hosts file, you really should specifiy the DNS server for dig.  
+Otherwise your IPs will always differ and the script will always do an needless update.  
+Here is an example of dig using Cloudflare DNS server 1.1.1.1:  
 ```bash
   DNS_IPV4=$(dig @1.1.1.1 +short "$DOMAIN_NAME" A | head -n 1)
 ```
 
-Otherwise your IPs will always differ and the script will always do an needless update.
