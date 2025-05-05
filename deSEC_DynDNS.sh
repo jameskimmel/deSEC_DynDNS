@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # This simple bash script to do DynDNS for deSEC.io.
 # https://github.com/jameskimmel/deSEC_DynDNS
