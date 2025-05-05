@@ -17,7 +17,7 @@ UPDATE_URL="https://update.dedyn.io/?hostname=$DOMAIN_NAME"
 # To not overwhelm deSEC servers all at the same time
 # we add a random delay. By using a delay between 10 and 290 seconds, we have at least a 10 second delay to the 5m mark.  
 MIN_DELAY=10
-MAX_DELAY=290
+MAX_DELAY=291
 sleep $(( MIN_DELAY + RANDOM % (MAX_DELAY - MIN_DELAY) ))
 
 # Check if IPv4 changed
