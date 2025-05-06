@@ -3,16 +3,27 @@
 deSEC_DynDNS is a DynDNS for deSEC.io written in bash.  
 It only issues an update command when your IP has changed.
 
-How to install it:
+This script depends on curl, dig and random. 
+
+This script was tested to work on Debian 12, Ubuntu 24.04.2 LTS, and macOS 15.4.1.  
+Please, feel free to contribute your own environment.
+
+Installation on Ubuntu/Debian:
 ```bash
 sudo apt install curl
-wget https://raw.githubusercontent.com/jameskimmel/deSEC_DynDNS/refs/heads/main/deSEC_DynDNS.sh
+curl -o deSEC_DynDNS.sh https://raw.githubusercontent.com/jameskimmel/deSEC_DynDNS/refs/heads/main/deSEC_DynDNS.sh
 chmod +x deSEC_DynDNS.sh
 ```
 
-On deSEC.io, create your auth token. Make sure that you have already created the A and/or AAAA records, since the auth token is not allowed to do that. 
+Installation on macOS:
+```bash
+curl -o deSEC_DynDNS.sh https://raw.githubusercontent.com/jameskimmel/deSEC_DynDNS/refs/heads/main/deSEC_DynDNS.sh
+chmod +x deSEC_DynDNS.sh
+```
 
-Edit the domain and the token in the script.
+On deSEC.io, create your auth token. Make sure that you have already created the A and/or AAAA records, since the auth token is by default not allowed to do that. 
+
+Edit the domain and the token in the script with an editor you like. I use nano as an example.  
 ```bash
 nano deSEC_DynDNS.sh
 ```
@@ -22,7 +33,7 @@ To test your config, run the script:
 ./deSEC_DynDNS.sh
 ```
 
-If you want to run it every 5min, creat a cronjob like this:  
+If you want to run it every 5min, create a cronjob:  
 ```bash
 crontab -e
 ```
