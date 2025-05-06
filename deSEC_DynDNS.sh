@@ -16,7 +16,7 @@ UPDATE_URL="https://update.dedyn.io/?hostname=$DOMAIN_NAME"
 
 # To not overwhelm deSEC servers all at the same time
 # we add a random delay. By using a delay between 10 and 290 seconds, we have at least a 10 second delay to the 5m mark. 
-# For users that don't use bash, you propaly don't support random.
+# For users that don't use bash, you probably don't support random.
 # You could install bash or comment out that delay. 
 MIN_DELAY=10
 MAX_DELAY=291
