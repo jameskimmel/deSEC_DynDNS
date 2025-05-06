@@ -21,7 +21,7 @@ curl -o deSEC_DynDNS.sh https://raw.githubusercontent.com/jameskimmel/deSEC_DynD
 chmod +x deSEC_DynDNS.sh
 ```
 
-Installation on OPNsense (crontab is currently work in progress):
+Installation on OPNsense (crontab is currently work in progress):  
 Access the shell over ssh.
 ```sh
 pkg install bind-tools
