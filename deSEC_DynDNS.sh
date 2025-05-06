@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-# This simple bash script to do DynDNS for deSEC.io.
+# Simple DynDNS script for deSEC.io.
 # https://github.com/jameskimmel/deSEC_DynDNS
 
 # Config
@@ -14,13 +14,13 @@ ENABLE_IPV6=true
 UPDATE_NEEDED=false
 UPDATE_URL="https://update.dedyn.io/?hostname=$DOMAIN_NAME"
 
-# To not overwhelm deSEC servers all at the same time
-# we add a random delay. By using a delay between 10 and 290 seconds, we have at least a 10 second delay to the 5m mark. 
-# For users that don't use bash, you probably don't support random.
-# You could install bash or comment out that delay. 
+# To not overwhelm deSEC servers all at the same time  
+# we add a random delay. By using a delay between 10 and 290 seconds, we have at least a 10 second delay to the 5m mark.  
 MIN_DELAY=10
-MAX_DELAY=291
-sleep $(( MIN_DELAY + RANDOM % (MAX_DELAY - MIN_DELAY) ))
+MAX_DELAY=290
+rand_num=$(od -An -N2 -i /dev/urandom | awk '{print $1}')
+random_delay=$((MIN_DELAY + rand_num % (MAX_DELAY - MIN_DELAY + 1)))
+sleep $random_delay
 
 # Check if IPv4 changed
 if [ "$ENABLE_IPV4" = true ]; then
@@ -54,8 +54,10 @@ if [ "$UPDATE_NEEDED" = true ]; then
     UPDATE_URL="${UPDATE_URL}&myipv6=$IPV6"
   fi
 
-  echo "Updating DynDNS with: $UPDATE_URL"
+  echo "try to update using this URL: $UPDATE_URL"
   curl -s "$UPDATE_URL" --header "Authorization: Token $TOKEN"
+  echo "update should be done. Exiting script"
+  exit 0
 
 else 
   echo "No update needed."
