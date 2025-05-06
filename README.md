@@ -1,11 +1,11 @@
 # deSEC_DynDNS
 
-deSEC_DynDNS is a DynDNS for deSEC.io written in bash.  
+deSEC_DynDNS is a DynDNS script for deSEC.io.  
 It only issues an update command when your IP has changed.
 
-This script depends on curl, dig and random. 
+This script depends on curl and dig. 
 
-This script was tested to work on Debian 12, Ubuntu 24.04.2 LTS, and macOS 15.4.1.  
+This script was tested to work on Debian 12, Ubuntu 24.04.2 LTS, and macOS 15.4.1 and OPNsense 25.1.5 (FreeBSD 14.2)  
 Please, feel free to contribute your own environment.
 
 Installation on Ubuntu/Debian:
@@ -17,6 +17,14 @@ chmod +x deSEC_DynDNS.sh
 
 Installation on macOS:
 ```bash
+curl -o deSEC_DynDNS.sh https://raw.githubusercontent.com/jameskimmel/deSEC_DynDNS/refs/heads/main/deSEC_DynDNS.sh
+chmod +x deSEC_DynDNS.sh
+```
+
+Installation on OPNsense (crontab is currently work in progress):
+Access the shell over ssh.
+```sh
+pkg install bind-tools
 curl -o deSEC_DynDNS.sh https://raw.githubusercontent.com/jameskimmel/deSEC_DynDNS/refs/heads/main/deSEC_DynDNS.sh
 chmod +x deSEC_DynDNS.sh
 ```
