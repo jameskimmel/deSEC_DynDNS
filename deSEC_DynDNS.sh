@@ -18,7 +18,7 @@ UPDATE_URL="https://update.dedyn.io/?hostname=$DOMAIN_NAME"
 # we add a random delay. By using a delay between 10 and 290 seconds, we have at least a 10 second delay to the 5m mark.  
 MIN_DELAY=10
 MAX_DELAY=290
-rand_num=$(od -An -N2 -i /dev/urandom | awk '{print $1}')
+rand_num=$(od -An -N2 -u /dev/urandom | awk '{print $1}')
 random_delay=$((MIN_DELAY + rand_num % (MAX_DELAY - MIN_DELAY + 1)))
 sleep $random_delay
 
