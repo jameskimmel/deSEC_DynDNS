@@ -99,7 +99,7 @@ Click save and you are done.
 I think it should be done with launchd ~/Library/LaunchAgents, but I haven't had the time to look into it. Happy to implement your pull request. 
 
 ## advanced config for IPv6 users
-I have a very good ISP [init7.net](https://init7.net) that follows[RIPE best practices recommendations](https://www.ripe.net/publications/docs/ripe-690).  
+I have a very good ISP ([init7.net](https://init7.net)) that follows [RIPE best practices recommendations](https://www.ripe.net/publications/docs/ripe-690).  
 This means I get a static IPv6 /48 prefix.   
 Checking for IPv6 updates would be a wasteful.  
 
