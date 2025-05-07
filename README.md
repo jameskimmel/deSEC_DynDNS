@@ -53,12 +53,3 @@ Append at the end of the file:
 **Don't forget the change the path to your home directory.**
 
 Hope this works for you! If you have any suggestions, please let me know by opening up an issue.
-
-**If you use DNS overrides:**  
-If you use local DNS overrides like unbound or hosts file, you really should specifiy the DNS server for dig.  
-Otherwise your IPs will always differ and the script will always do an needless update.  
-Here is an example of dig using Cloudflare DNS server 1.1.1.1:  
-```bash
-  DNS_IPV4=$(dig @1.1.1.1 +short "$DOMAIN_NAME" A | head -n 1)
-```
-
