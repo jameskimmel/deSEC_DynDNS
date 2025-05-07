@@ -1,12 +1,12 @@
 # deSEC_DynDNS
 
-deSEC_DynDNS is a DynDNS script for deSEC.io.  
-It only issues an update command when your IP has changed.
+**deSEC_DynDNS** is a simple DynDNS script for [deSEC.io](https://desec.io) that updates your DNS records only when your IP address changes.  
 
-This script depends on curl and dig. 
+This script depends on **curl** and **dig** (from `bind-tools` on some systems).  
 
-This script was tested to work on Debian 12, Ubuntu 24.04.2 LTS, and macOS 15.4.1 and OPNsense 25.1.5 (FreeBSD 14.2)  
-Please, feel free to contribute your own environment.
+Tested on **Debian 12**, **Ubuntu 24.04.2 LTS**, **macOS 15.4.1**, and **OPNsense 25.1.5 (FreeBSD 14.2)**  
+
+Feel free to contribute support for other environments, improvements, suggestions or correct my spelling mistakes :blush:    
 
 ## Prepare Ubuntu/Debian:
 ```bash
@@ -30,12 +30,12 @@ chmod +x deSEC_DynDNS.sh
 ```
 
 ## Configure 
-On deSEC.io, create your auth token.  
+On [deSEC.io](https://desec.io), create your auth token.  
 Make sure that you have already created the A and/or AAAA records, since the auth token is by default not allowed to do that.  
 
-Edit the domain and the token in the script,  with an editor you like. I use vi as an example.  
+Edit the domain and the token in the script with an editor you like. I use nano as an example.  
 ```bash
-vi deSEC_DynDNS.sh
+nano deSEC_DynDNS.sh
 ```
 
 ## Test your config
@@ -44,7 +44,7 @@ To test your config, run the script:
 ./deSEC_DynDNS.sh
 ```
 
-## Auto run your script
+## run it automatically
 Depending on your OS, there are different way to repeatedly run your script.  
 In these examples, we use 5min as intervall to run.  
 
@@ -91,11 +91,9 @@ If your script works, you can no leave the shell and go into the webGUI.
 Go to System -> Settings -> Cron  
 Click to add a new job.  
 Change minutes to -> */5 and hours to -> *  
-Under commands you should see deSEC DynDNS Update (the description text of our configd action)  
+Under commands you should see deSEC DynDNS Update (the description text of our configd action).  
 Under description add something like "deSEC DynDNS Update".  
 Click save and you are done.  
 
 ## macOS
 I think it should be done with launchd ~/Library/LaunchAgents, but I haven't had the time to look into it. Happy to implement your pull request. 
-
-Hope this works for you! If you have any suggestions, please let me know by opening up an issue.
