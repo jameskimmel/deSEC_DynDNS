@@ -8,20 +8,20 @@ This script depends on curl and dig.
 This script was tested to work on Debian 12, Ubuntu 24.04.2 LTS, and macOS 15.4.1 and OPNsense 25.1.5 (FreeBSD 14.2)  
 Please, feel free to contribute your own environment.
 
-Installation on Ubuntu/Debian:
+## Prepare Ubuntu/Debian:
 ```bash
 sudo apt install curl
 curl -o deSEC_DynDNS.sh https://raw.githubusercontent.com/jameskimmel/deSEC_DynDNS/refs/heads/main/deSEC_DynDNS.sh
 chmod +x deSEC_DynDNS.sh
 ```
 
-Installation on macOS:
+## Prepare on macOS:
 ```bash
 curl -o deSEC_DynDNS.sh https://raw.githubusercontent.com/jameskimmel/deSEC_DynDNS/refs/heads/main/deSEC_DynDNS.sh
 chmod +x deSEC_DynDNS.sh
 ```
 
-Installation on OPNsense (crontab is currently work in progress):  
+## Prepare on OPNsense:  
 Access the shell over ssh.
 ```sh
 pkg install bind-tools
@@ -29,19 +29,27 @@ curl -o deSEC_DynDNS.sh https://raw.githubusercontent.com/jameskimmel/deSEC_DynD
 chmod +x deSEC_DynDNS.sh
 ```
 
-On deSEC.io, create your auth token. Make sure that you have already created the A and/or AAAA records, since the auth token is by default not allowed to do that. 
+## Configure 
+On deSEC.io, create your auth token.  
+Make sure that you have already created the A and/or AAAA records, since the auth token is by default not allowed to do that.  
 
-Edit the domain and the token in the script with an editor you like. I use nano as an example.  
+Edit the domain and the token in the script,  with an editor you like. I use vi as an example.  
 ```bash
-nano deSEC_DynDNS.sh
+vi deSEC_DynDNS.sh
 ```
 
-To test your config, run the script: 
+## Test your config
+To test your config, run the script:  
 ```bash
 ./deSEC_DynDNS.sh
 ```
 
-If you want to run it every 5min, create a cronjob:  
+## Auto run your script
+Depending on your OS, there are different way to repeatedly run your script.  
+In these examples, we use 5min as intervall to run.  
+
+### Linux
+Create a cronjob:  
 ```bash
 crontab -e
 ```
@@ -50,6 +58,44 @@ Append at the end of the file:
 ```bash
 */5 * * * * /home/YourUserName/deSEC_DynDNS.sh > /dev/null
 ```
-**Don't forget the change the path to your home directory.**
+**Don't forget the change the path to your home directory.**  
+
+### OPNsense
+SSH into your OPNsense and press the option 8 to enter the shell.  
+OPNsense does not have nano installed, so we use vi instead to edit files.  
+```bash
+vi /usr/local/opnsense/service/conf/actions.d/actions_desecdyndns.conf
+```
+press "i" to insert:
+```bash
+[run]
+command:/root/deSEC_DynDNS.sh
+parameters:
+type:script
+message:run deSEC DynDNS
+description:deSEC DynDNS Update
+```
+save and exit by pressing escape -> : -> wq -> enter
+
+restart configd
+```bash
+service configd restart
+```
+
+test your config
+```bash
+configctl desec_dyndns run
+```
+
+If your script works, you can no leave the shell and go into the webGUI.  
+Go to System -> Settings -> Cron  
+Click to add a new job.  
+Change minutes to -> */5 and hours to -> *  
+Under commands you should see deSEC DynDNS Update (the description text of our configd action)  
+Under description add something like "deSEC DynDNS Update".  
+Click save and you are done.  
+
+## macOS
+I think it should be done with launchd ~/Library/LaunchAgents, but I haven't had the time to look into it. Happy to implement your pull request. 
 
 Hope this works for you! If you have any suggestions, please let me know by opening up an issue.
