@@ -25,7 +25,7 @@ sleep $random_delay
 # Check if IPv4 changed
 if [ "$ENABLE_IPV4" = true ]; then
 IPV4=$(curl -s -4 https://checkipv4.dedyn.io)
-  DNS_IPV4=$(dig +short "$DOMAIN_NAME" A | head -n 1)
+  DNS_IPV4=$(dig @ns1.desec.io +short "$DOMAIN_NAME" -t A | head -n 1)
 
   if [ "$DNS_IPV4" != "$IPV4" ]; then
     UPDATE_NEEDED=true
@@ -35,7 +35,7 @@ fi
 # Check if IPv6 changed
 if [ "$ENABLE_IPV6" = true ]; then
   IPV6=$(curl -s -6 https://checkipv6.dedyn.io)
-  DNS_IPV6=$(dig +short "$DOMAIN_NAME" AAAA | head -n 1)
+  DNS_IPV6=$(dig @ns2.desec.org +short "$DOMAIN_NAME" -t AAAA | head -n 1)
 
   if [ "$DNS_IPV6" != "$IPV6" ]; then
     UPDATE_NEEDED=true
