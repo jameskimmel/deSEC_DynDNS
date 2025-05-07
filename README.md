@@ -95,5 +95,21 @@ Under commands you should see deSEC DynDNS Update (the description text of our c
 Under description add something like "deSEC DynDNS Update".  
 Click save and you are done.  
 
-## macOS
+### macOS
 I think it should be done with launchd ~/Library/LaunchAgents, but I haven't had the time to look into it. Happy to implement your pull request. 
+
+## advanced config for IPv6 users
+I have a very good ISP [init7.net](https://init7.net) that follows[RIPE best practices recommendations](https://www.ripe.net/publications/docs/ripe-690).  
+This means I get a static IPv6 /48 prefix.   
+Checking for IPv6 updates would be a wasteful.  
+
+But if I disable IPv6, the script will remove my IPv6, since the update url does no longer specify an IPv6, which leads deSEC to remove the AAAA record.  
+Could prevent this by using changing "ENABLE_IPV6=false" and replace the update logic section with this:  
+```bash
+# If an update is needed, build the update URL and send request
+if [ "$UPDATE_NEEDED" = true ]; then
+
+ # Append IPs to update URL if enabled
+    UPDATE_URL="${UPDATE_URL}&myipv4=$IPV4&myipv6=preserve"
+```
+
