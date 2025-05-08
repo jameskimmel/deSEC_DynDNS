@@ -3,14 +3,24 @@
 # Simple DynDNS script for deSEC.io.
 # https://github.com/jameskimmel/deSEC_DynDNS
 
-# Config
-# Insert your domain name and the auth token. You can disable IPv4 or IPv6.
+# Config:
+# Insert your domain name and the auth token. 
 DOMAIN_NAME="yourdomain.com"
 TOKEN="1234"
-ENABLE_IPV4=true
-ENABLE_IPV6=true
 
-# You should not need to change anything below this.
+# Preserve:
+# This will set the update URL to preserve, 
+# therefore not touching your current record.
+PRESERVE_IPV4=false
+PRESERVE_IPV6=false
+
+# You should not need to change anything below this line!
+
+# Disable IPv4 or IPv6
+CHECK_IPV4=true
+CHECK_IPV6=true
+
+# Start
 UPDATE_NEEDED=false
 UPDATE_URL="https://update.dedyn.io/?hostname=$DOMAIN_NAME"
 
@@ -18,12 +28,32 @@ UPDATE_URL="https://update.dedyn.io/?hostname=$DOMAIN_NAME"
 # we add a random delay. By using a delay between 10 and 290 seconds, we have at least a 10 second delay to the 5m mark.  
 MIN_DELAY=10
 MAX_DELAY=290
-rand_num=$(od -An -N2 -u /dev/urandom | awk '{print $1}')
-random_delay=$((MIN_DELAY + rand_num % (MAX_DELAY - MIN_DELAY + 1)))
-sleep $random_delay
+RAND_NUM=$(od -An -N2 -t u /dev/urandom | awk '{print $1}')
+RANDOM_DELAY=$((MIN_DELAY + RAND_NUM % (MAX_DELAY - MIN_DELAY + 1)))
+sleep $RANDOM_DELAY
+
+# Preserve logic:
+# If we have a preserver option set to true, we don't want to check for updates for that IP.
+# We disable the "check" variable, but we still want to include it in the update URL.
+
+# Copy user settings
+SET_IPV4=$CHECK_IPV4
+SET_PV6=$CHECK_IPV6
+
+# Check if the preserve option is enabled. 
+# If yes, disable the check and set the IP to preserve  
+if [ "$PRESERVE_IPV4" = true ]; then
+  CHECK_IPV4=false
+  IPV4="preserve"
+fi
+
+if [ "$PRESERVE_IPV6" = true ]; then
+  CHECK_IPV6=false
+  IPV6="preserve"
+fi
 
 # Check if IPv4 changed
-if [ "$ENABLE_IPV4" = true ]; then
+if [ "$CHECK_IPV4" = true ]; then
 IPV4=$(curl -s -4 https://checkipv4.dedyn.io)
   DNS_IPV4=$(dig @ns1.desec.io +short "$DOMAIN_NAME" -t A | head -n 1)
 
@@ -33,7 +63,7 @@ IPV4=$(curl -s -4 https://checkipv4.dedyn.io)
 fi
 
 # Check if IPv6 changed
-if [ "$ENABLE_IPV6" = true ]; then
+if [ "$CHECK_IPV6" = true ]; then
   IPV6=$(curl -s -6 https://checkipv6.dedyn.io)
   DNS_IPV6=$(dig @ns2.desec.org +short "$DOMAIN_NAME" -t AAAA | head -n 1)
 
@@ -42,15 +72,15 @@ if [ "$ENABLE_IPV6" = true ]; then
   fi
 fi
 
-# If an update is needed, build the update URL and send request
+# If an update is needed, build the update URL and send a request
 if [ "$UPDATE_NEEDED" = true ]; then
 
  # Append IPs to update URL if enabled
-  if [ "$ENABLE_IPV4" = true ]; then
+  if [ "$SET_IPV4" = true ]; then
     UPDATE_URL="${UPDATE_URL}&myipv4=$IPV4"
   fi
 
-  if [ "$ENABLE_IPV6" = true ]; then
+  if [ "$SET_IPV6" = true ]; then
     UPDATE_URL="${UPDATE_URL}&myipv6=$IPV6"
   fi
 

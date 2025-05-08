@@ -37,6 +37,25 @@ Edit the domain and the token in the script with an editor you like. I use nano 
 ```bash
 nano deSEC_DynDNS.sh
 ```
+## Update logic of deSEC
+By default this script behaves like the default deSEC Upate URL,  
+which means if there is an IPv4 or IPv6 detected it will set it.  
+If an IP isn't detected, it will **remove** it!  
+Even records you created manually on the webGUI for the same domain will be removed.  
+If you don't like that behavior, use the preserve option.
+
+## Preserve option
+This will set the update URL to preserve, thous not touching your current record.
+It will also disable checks for that protocal, since they aren't needed. 
+
+## Why you probably should use the preserve option for IPv6
+Your ISP should follow [RIPE best practices recommendations](https://www.ripe.net/publications/docs/ripe-690) and you should get a static /48 (or at least /56) prefix. 
+When having a static prefix, checking for IPv6 changes is a little bit wastful.  
+Only advantage is that when your host looses IPv6, your AAAA record gets deleted.   
+Setting the preserve option for IPv6 to true, will disable potentially unnessesary checks for IPv6.  
+
+## Disable a protocol
+If you for whatever obscure reasons don't want to enable a protocol, you can disable it.  
 
 ## Test your config
 To test your config, run the script:  
@@ -97,19 +116,4 @@ Click save and you are done.
 
 ### macOS
 I think it should be done with launchd ~/Library/LaunchAgents, but I haven't had the time to look into it. Happy to implement your pull request. 
-
-## advanced config for IPv6 users
-I have a very good ISP ([init7.net](https://init7.net)) that follows [RIPE best practices recommendations](https://www.ripe.net/publications/docs/ripe-690).  
-This means I get a static IPv6 /48 prefix.   
-Checking for IPv6 updates would be a wasteful.  
-
-But if I disable IPv6, the script will remove my IPv6, since the update url does no longer specify an IPv6, which leads deSEC to remove the AAAA record.  
-Could prevent this by using changing "ENABLE_IPV6=false" and replace the update logic section with this:  
-```bash
-# If an update is needed, build the update URL and send request
-if [ "$UPDATE_NEEDED" = true ]; then
-
- # Append IPs to update URL if enabled
-    UPDATE_URL="${UPDATE_URL}&myipv4=$IPV4&myipv6=preserve"
-```
 
