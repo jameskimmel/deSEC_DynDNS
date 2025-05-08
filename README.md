@@ -42,18 +42,14 @@ By default this script behaves like the default deSEC Upate URL.
 If there is an IPv4 or IPv6 detected, it will create A and/or AAAA record(s).    
 On the other hand, if IPv4 or IPv isn't detected, it will remove the corresponding records!   
 Yes, even records you manually created on the webGUI will be removed!  
+Resoning for that behavior is that if you host looses an IP, you probably also want to delete the record.  
+This could potentially help you even noticing that there is a problem.  
 If you don't like that behavior, use the preserve option.  
 That why it will leave that IP untouched.  
 
 ## Preserve option
 This will set the update URL to preserve, thous not touching your current record.
 It will also disable checks for that protocal, since they aren't needed. 
-
-## Why you probably should use the preserve option for IPv6
-Your ISP should follow [RIPE best practices recommendations](https://www.ripe.net/publications/docs/ripe-690) and you should get a static /48 (or at least /56) prefix. 
-When having a static prefix, checking for IPv6 changes is a little bit wastful.  
-Only advantage is that when your host looses IPv6, your AAAA record gets deleted.   
-Setting the preserve option for IPv6 to true, will disable potentially unnessesary checks for IPv6.  
 
 ## Disable a protocol
 If you for whatever obscure reasons don't want to enable a protocol, you can disable it.  
