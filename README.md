@@ -49,7 +49,7 @@ That why it will leave that IP untouched.
 
 ## Preserve option
 This will set the update URL to preserve, thous not touching your current record.
-It will also disable checks for that protocal, since they aren't needed. 
+It will also disable checks for that protocol, since they are no longer needed when preserving the IP.  
 
 ## Disable a protocol
 If you for whatever obscure reasons don't want to enable a protocol, you can disable it.  
