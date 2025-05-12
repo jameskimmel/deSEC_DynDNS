@@ -14,6 +14,19 @@ TOKEN="1234"
 PRESERVE_IPV4=false
 PRESERVE_IPV6=false
 
+# Paths:
+# For Debian and Ubuntu, paths should already be correct.
+# Use the command "which", to find out where these commands are located on your OS.
+# For OPNsense, paths are most likely /usr/local/bin/ instead
+# For macOS, sleep is located at /bin/sleep
+
+DIG_CMD='/usr/bin/dig'
+CURL_CMD='/usr/bin/curl'
+OD_CMD='/usr/bin/od'
+AWK_CMD='/usr/bin/awk'
+SLEEP_CMD='/usr/bin/sleep'
+HEAD_CMD='/usr/bin/head'
+
 # You should not need to change anything below this line!
 
 # Disable IPv4 or IPv6
@@ -28,9 +41,9 @@ UPDATE_URL="https://update.dedyn.io/?hostname=$DOMAIN_NAME"
 # we add a random delay. By using a delay between 10 and 290 seconds, we have at least a 10 second delay to the 5m mark.  
 MIN_DELAY=10
 MAX_DELAY=290
-RAND_NUM=$(od -An -N2 -t u /dev/urandom | awk '{print $1}')
+RAND_NUM=$($OD_CMD -An -N2 -t u /dev/urandom | $AWK_CMD '{print $1}')
 RANDOM_DELAY=$((MIN_DELAY + RAND_NUM % (MAX_DELAY - MIN_DELAY + 1)))
-sleep $RANDOM_DELAY
+$SLEEP_CMD $RANDOM_DELAY
 
 # Preserve logic:
 # If we have a preserver option set to true, we don't want to check for updates for that IP.
@@ -54,8 +67,8 @@ fi
 
 # Check if IPv4 changed
 if [ "$CHECK_IPV4" = true ]; then
-IPV4=$(curl -s -4 https://checkipv4.dedyn.io)
-  DNS_IPV4=$(dig @ns1.desec.io +short "$DOMAIN_NAME" -t A | head -n 1)
+IPV4=$($CURL_CMD -s -4 https://checkipv4.dedyn.io)
+  DNS_IPV4=$($DIG_CMD  @ns1.desec.io +short "$DOMAIN_NAME" -t A | $HEAD_CMD  -n 1)
 
   if [ "$DNS_IPV4" != "$IPV4" ]; then
     UPDATE_NEEDED=true
@@ -64,8 +77,8 @@ fi
 
 # Check if IPv6 changed
 if [ "$CHECK_IPV6" = true ]; then
-  IPV6=$(curl -s -6 https://checkipv6.dedyn.io)
-  DNS_IPV6=$(dig @ns2.desec.org +short "$DOMAIN_NAME" -t AAAA | head -n 1)
+  IPV6=$($CURL_CMD -s -6 https://checkipv6.dedyn.io)
+  DNS_IPV6=$($DIG_CMD  @ns2.desec.org +short "$DOMAIN_NAME" -t AAAA | $HEAD_CMD  -n 1)
 
   if [ "$DNS_IPV6" != "$IPV6" ]; then
     UPDATE_NEEDED=true
@@ -85,7 +98,7 @@ if [ "$UPDATE_NEEDED" = true ]; then
   fi
 
   echo "try to update using this URL: $UPDATE_URL"
-  curl -s "$UPDATE_URL" --header "Authorization: Token $TOKEN"
+  $CURL_CMD -s "$UPDATE_URL" --header "Authorization: Token $TOKEN"
   echo "update should be done. Exiting script"
   exit 0
 

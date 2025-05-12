@@ -37,7 +37,7 @@ Edit the domain and the token in the script with an editor you like. I use nano 
 ```bash
 nano deSEC_DynDNS.sh
 ```
-## Update logic of deSEC
+### Update logic of deSEC
 By default this script behaves like the default deSEC Upate URL.    
 If there is an IPv4 or IPv6 detected, it will create A and/or AAAA record(s).    
 On the other hand, if IPv4 or IPv isn't detected, it will remove the corresponding records!   
@@ -47,11 +47,15 @@ This could potentially help you even noticing that there is a problem.
 If you don't like that behavior, use the preserve option.  
 That why it will leave that IP untouched.  
 
-## Preserve option
+### Preserve option
 This will set the update URL to preserve, thous not touching your current record.
 It will also disable checks for that protocol, since they are no longer needed when preserving the IP.  
 
-## Disable a protocol
+### Command paths
+For Debian and Ubuntu the paths should already be correct.
+For OPNsense and macOS, you have to adjust them. 
+
+### Disable a protocol
 If you for whatever obscure reasons don't want to enable a protocol, you can disable it.  
 
 ## Test your config
