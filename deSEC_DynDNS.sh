@@ -4,7 +4,7 @@
 # https://github.com/jameskimmel/deSEC_DynDNS
 
 # Config:
-# Insert your domain name and the auth token. 
+# Insert your domain name and the auth token.
 DOMAIN_NAME="yourdomain.com"
 TOKEN="1234"
 
