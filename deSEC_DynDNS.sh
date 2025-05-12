@@ -29,6 +29,9 @@ HEAD_CMD='/usr/bin/head'
 
 # You should not need to change anything below this line!
 
+# Nameserver used for dig
+NAMESERVER1='ns1.desec.io'
+
 # Disable IPv4 or IPv6
 CHECK_IPV4=true
 CHECK_IPV6=true
@@ -68,7 +71,7 @@ fi
 # Check if IPv4 changed
 if [ "$CHECK_IPV4" = true ]; then
 IPV4=$($CURL_CMD -s -4 https://checkipv4.dedyn.io)
-  DNS_IPV4=$($DIG_CMD  @ns1.desec.io +short "$DOMAIN_NAME" -t A | $HEAD_CMD  -n 1)
+  DNS_IPV4=$($DIG_CMD  @$NAMESERVER1 +short "$DOMAIN_NAME" -t A | $HEAD_CMD  -n 1)
 
   if [ "$DNS_IPV4" != "$IPV4" ]; then
     UPDATE_NEEDED=true
@@ -78,7 +81,7 @@ fi
 # Check if IPv6 changed
 if [ "$CHECK_IPV6" = true ]; then
   IPV6=$($CURL_CMD -s -6 https://checkipv6.dedyn.io)
-  DNS_IPV6=$($DIG_CMD  @ns2.desec.org +short "$DOMAIN_NAME" -t AAAA | $HEAD_CMD  -n 1)
+  DNS_IPV6=$($DIG_CMD  @$NAMESERVER1 +short "$DOMAIN_NAME" -t AAAA | $HEAD_CMD  -n 1)
 
   if [ "$DNS_IPV6" != "$IPV6" ]; then
     UPDATE_NEEDED=true
