@@ -32,6 +32,10 @@ HEAD_CMD='/usr/bin/head'
 # Nameserver used for dig
 NAMESERVER1='ns1.desec.io'
 
+# Set url to determine your own IP
+CHECK_IPV4_URL='https://checkipv4.dedyn.io'
+CHECK_IPV6_URL='https://checkipv6.dedyn.io'
+
 # Disable IPv4 or IPv6
 CHECK_IPV4=true
 CHECK_IPV6=true
@@ -70,8 +74,21 @@ fi
 
 # Check if IPv4 changed
 if [ "$CHECK_IPV4" = true ]; then
-IPV4=$($CURL_CMD -s -4 https://checkipv4.dedyn.io)
-  DNS_IPV4=$($DIG_CMD  @$NAMESERVER1 +short "$DOMAIN_NAME" -t A | $HEAD_CMD  -n 1)
+  IPV4=$($CURL_CMD -s -4 $CHECK_IPV4_URL)
+  CURL_EXIT=$?
+
+  if [ $CURL_EXIT -ne 0 ]; then
+    echo "Error: Failed to get your IPv4 from $CHECK_IPV4_URL " >&2
+    exit 1
+  fi
+
+  DNS_IPV4=$($DIG_CMD @$NAMESERVER1 +short "$DOMAIN_NAME" -t A | $HEAD_CMD -n 1)
+  DIG_EXIT=$?
+
+  if [ $DIG_EXIT -ne 0 ]; then
+    echo "Error: Failed to retrieve a valid DNS A record from $NAMESERVER1." >&2
+    exit 1
+  fi
 
   if [ "$DNS_IPV4" != "$IPV4" ]; then
     UPDATE_NEEDED=true
@@ -80,8 +97,21 @@ fi
 
 # Check if IPv6 changed
 if [ "$CHECK_IPV6" = true ]; then
-  IPV6=$($CURL_CMD -s -6 https://checkipv6.dedyn.io)
+  IPV6=$($CURL_CMD -s -6 $CHECK_IPV6_URL)
+    CURL_EXIT=$?
+
+ if [ $CURL_EXIT -ne 0 ]; then
+    echo "Error: Failed to get your IPv6 from $CHECK_IPV6_URL " >&2
+    exit 1
+  fi
+
   DNS_IPV6=$($DIG_CMD  @$NAMESERVER1 +short "$DOMAIN_NAME" -t AAAA | $HEAD_CMD  -n 1)
+  DIG_EXIT=$?
+
+  if [ $DIG_EXIT -ne 0 ]; then
+    echo "Error: Failed to retrieve a valid DNS AAAA record from $NAMESERVER1." >&2
+    exit 1
+  fi
 
   if [ "$DNS_IPV6" != "$IPV6" ]; then
     UPDATE_NEEDED=true
@@ -100,9 +130,14 @@ if [ "$UPDATE_NEEDED" = true ]; then
     UPDATE_URL="${UPDATE_URL}&myipv6=$IPV6"
   fi
 
-  echo "try to update using this URL: $UPDATE_URL"
   $CURL_CMD -s "$UPDATE_URL" --header "Authorization: Token $TOKEN"
-  echo "update should be done. Exiting script"
+     CURL_EXIT=$?
+
+ if [ $CURL_EXIT -ne 0 ]; then
+    echo "Error: unable to set record(s). Used curl with $UPDATE_URL but failed" >&2
+    exit 1
+  fi
+  echo "Sucessfully updated your record(s) with $UPDATE_URL"
   exit 0
 
 else 
