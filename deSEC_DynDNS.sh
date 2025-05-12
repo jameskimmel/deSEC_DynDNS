@@ -84,7 +84,7 @@ if [ "$CHECK_IPV4" = true ]; then
   DIG_EXIT=$?
 
   if [ "$DIG_EXIT" -ne 0 ]; then
-    echo "Failed to retrieve a valid DNS A record from $NAMESERVER1. Dig error: $DIG_EXIT" >&2
+    echo "Failed to retrieve an A record from $NAMESERVER1. Dig error: $DIG_EXIT" >&2
     exit 1
   fi
 
@@ -107,7 +107,7 @@ if [ "$CHECK_IPV6" = true ]; then
   DIG_EXIT=$?
 
   if [ "$DIG_EXIT" -ne 0 ]; then
-    echo "Failed to retrieve a valid DNS AAAA record from $NAMESERVER1. Dig error: $DIG_EXIT" >&2
+    echo "Failed to retrieve an AAAA record from $NAMESERVER1. Dig error: $DIG_EXIT" >&2
     exit 1
   fi
 
@@ -116,7 +116,7 @@ if [ "$CHECK_IPV6" = true ]; then
   fi   
 fi
 
-# If an update is needed, build the update URL and send a request
+# If an update is needed, build the update URL
 if [ "$UPDATE_NEEDED" = true ]; then
   # Append IPs to update URL if enabled
   if [ "$SET_IPV4" = true ]; then
@@ -128,7 +128,7 @@ if [ "$UPDATE_NEEDED" = true ]; then
   fi
 
   # Do the actual update 
-  response=$($CURL_CMD -s -w "%{http_code}" -o /dev/null --header "Authorization: Token $TOKEN" "$UPDATE_URL")
+  UPDATE_RESPONSE=$($CURL_CMD -s -w "%{http_code}" -o /dev/null --header "Authorization: Token $TOKEN" "$UPDATE_URL")
   CURL_EXIT=$?
   
   if [ "$CURL_EXIT" -ne 0 ]; then
@@ -137,12 +137,11 @@ if [ "$UPDATE_NEEDED" = true ]; then
   fi
 
   # Check if the response of our update request is 200
-  if [ "$response" -eq 200 ]; then
-    echo "Success! HTTP status 200 received. Successfully updated your record(s) with $UPDATE_URL"
+  if [ "$UPDATE_RESPONSE" -eq 200 ]; then
+    echo "Success! Successfully updated your record(s) by using this URL: $UPDATE_URL"
     exit 0
   else
-    echo "$UPDATE_URL"
-    echo "Error: HTTP status $response received, expected 200."
+    echo "We tried it with this URL $UPDATE_URL. Instead of getting 200 as response, we got this error: $UPDATE_RESPONSE"
     exit 1
   fi
 else
