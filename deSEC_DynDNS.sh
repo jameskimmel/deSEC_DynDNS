@@ -58,19 +58,19 @@ $SLEEP_CMD $RANDOM_DELAY
 
 # Copy user settings
 SET_IPV4=$CHECK_IPV4
-SET_PV6=$CHECK_IPV6
+SET_IPV6=$CHECK_IPV6
 
 # Check if the preserve option is enabled. 
 # If yes, disable the check and set the IP to preserve  
 if [ "$PRESERVE_IPV4" = true ]; then
   CHECK_IPV4=false
   IPV4="preserve"
-fi
+  fi
 
 if [ "$PRESERVE_IPV6" = true ]; then
   CHECK_IPV6=false
   IPV6="preserve"
-fi
+  fi
 
 # Check if IPv4 changed
 if [ "$CHECK_IPV4" = true ]; then
@@ -78,21 +78,21 @@ if [ "$CHECK_IPV4" = true ]; then
   CURL_EXIT=$?
 
   if [ $CURL_EXIT -ne 0 ]; then
-    echo "Error: Failed to get your IPv4 from $CHECK_IPV4_URL " >&2
+    echo "Failed to get your IPv4 from $CHECK_IPV4_URL. Curl error: $CURL_EXIT" >&2
     exit 1
-  fi
+    fi
 
   DNS_IPV4=$($DIG_CMD @$NAMESERVER1 +short "$DOMAIN_NAME" -t A | $HEAD_CMD -n 1)
   DIG_EXIT=$?
 
   if [ $DIG_EXIT -ne 0 ]; then
-    echo "Error: Failed to retrieve a valid DNS A record from $NAMESERVER1." >&2
+    echo "Failed to retrieve a valid DNS A record from $NAMESERVER1. Dig error: $DIG_EXIT" >&2
     exit 1
-  fi
+    fi
 
   if [ "$DNS_IPV4" != "$IPV4" ]; then
     UPDATE_NEEDED=true
-  fi
+    fi
 fi
 
 # Check if IPv6 changed
@@ -101,21 +101,21 @@ if [ "$CHECK_IPV6" = true ]; then
     CURL_EXIT=$?
 
  if [ $CURL_EXIT -ne 0 ]; then
-    echo "Error: Failed to get your IPv6 from $CHECK_IPV6_URL " >&2
+    echo "Failed to get your IPv6 from $CHECK_IPV6_URL. Curl error: $CURL_EXIT" >&2
     exit 1
   fi
 
-  DNS_IPV6=$($DIG_CMD  @$NAMESERVER1 +short "$DOMAIN_NAME" -t AAAA | $HEAD_CMD  -n 1)
+  DNS_IPV6=$($DIG_CMD @$NAMESERVER1 +short "$DOMAIN_NAME" -t AAAA | $HEAD_CMD  -n 1)
   DIG_EXIT=$?
 
   if [ $DIG_EXIT -ne 0 ]; then
-    echo "Error: Failed to retrieve a valid DNS AAAA record from $NAMESERVER1." >&2
+    echo "Failed to retrieve a valid DNS AAAA record from $NAMESERVER1. Dig error: $DIG_EXIT" >&2
     exit 1
-  fi
+    fi
 
   if [ "$DNS_IPV6" != "$IPV6" ]; then
     UPDATE_NEEDED=true
-  fi
+    fi   
 fi
 
 # If an update is needed, build the update URL and send a request
@@ -124,23 +124,32 @@ if [ "$UPDATE_NEEDED" = true ]; then
  # Append IPs to update URL if enabled
   if [ "$SET_IPV4" = true ]; then
     UPDATE_URL="${UPDATE_URL}&myipv4=$IPV4"
-  fi
+    fi
 
   if [ "$SET_IPV6" = true ]; then
     UPDATE_URL="${UPDATE_URL}&myipv6=$IPV6"
-  fi
+    fi
 
-  $CURL_CMD -s "$UPDATE_URL" --header "Authorization: Token $TOKEN"
+    # Do the actual update 
+    response=$($CURL_CMD -s -w "%{http_code}" -o /dev/null --header "Authorization: Token $TOKEN" "$UPDATE_URL")
      CURL_EXIT=$?
-
- if [ $CURL_EXIT -ne 0 ]; then
-    echo "Error: unable to set record(s). Used curl with $UPDATE_URL but failed" >&2
-    exit 1
-  fi
-  echo "Sucessfully updated your record(s) with $UPDATE_URL"
-  exit 0
-
-else 
-  echo "No update needed."
-  exit 0
-fi
+     
+     if [ $CURL_EXIT -ne 0 ]; then
+     echo "Error: unable to set record(s). Used curl with $UPDATE_URL but failed. Curl error $CURL_EXIT" >&2
+     exit 1
+     fi
+     
+     # Check if the response of our update request is 200
+     if [ "$response" -eq 200 ]; then
+     echo "Success! HTTP status 200 received. Sucessfully updated your record(s) with $UPDATE_URL"
+     exit 0
+     else
+     echo "$UPDATE_URL"
+     echo "Error: HTTP status $response received, expected 200."
+     exit 1
+     fi
+     
+     else 
+     echo "No update needed."
+     exit 0
+    fi
