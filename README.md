@@ -22,9 +22,9 @@ chmod +x deSEC_DynDNS.sh
 ```
 
 ## Prepare on OPNsense:  
+Install os-bind in the webGUI under System -> Firmware -> Plugins
 Access the shell over ssh.
 ```sh
-pkg install bind-tools
 curl -o deSEC_DynDNS.sh https://raw.githubusercontent.com/jameskimmel/deSEC_DynDNS/refs/heads/main/deSEC_DynDNS.sh
 chmod +x deSEC_DynDNS.sh
 ```
@@ -66,7 +66,7 @@ To test your config, run the script:
 
 ## run it automatically
 Depending on your OS, there are different way to repeatedly run your script.  
-In these examples, we use 5min as intervall to run.  
+In these examples, we use a 5min intervall.  
 
 ### Linux
 Create a cronjob:  
@@ -97,14 +97,9 @@ description:deSEC DynDNS Update
 ```
 save and exit by pressing escape -> : -> wq -> enter
 
-restart configd
+restart configd (or even better, reboot OPNsense)
 ```bash
 service configd restart
-```
-
-test your config
-```bash
-configctl desec_dyndns run
 ```
 
 If your script works, you can no leave the shell and go into the webGUI.  
