@@ -16,7 +16,7 @@ PRESERVE_IPV6=false
 # Paths:
 # For Debian and Ubuntu, paths should already be correct.
 # Use the command "which", to find out where these commands are located on your OS.
-# For OPNsense, dig and curl should be located at /usr/local/bin/
+# For OPNsense, dig and curl should be located at /usr/local/bin/ and sleep should be located at /bin/sleep
 # For macOS, sleep should be located at /bin/sleep
 DIG_CMD='/usr/bin/dig'
 CURL_CMD='/usr/bin/curl'
