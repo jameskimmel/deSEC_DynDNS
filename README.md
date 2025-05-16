@@ -23,7 +23,7 @@ chmod +x deSEC_DynDNS.sh
 
 ## Prepare on OPNsense:  
 Install os-bind in the webGUI under System -> Firmware -> Plugins
-Access the shell over ssh.
+After that, access the shell over ssh and enter:
 ```sh
 curl -o deSEC_DynDNS.sh https://raw.githubusercontent.com/jameskimmel/deSEC_DynDNS/refs/heads/main/deSEC_DynDNS.sh
 chmod +x deSEC_DynDNS.sh
