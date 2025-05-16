@@ -38,7 +38,7 @@ Edit the domain and the token in the script with an editor you like. I use nano 
 nano deSEC_DynDNS.sh
 ```
 ### Update logic of deSEC
-By default this script behaves like the default deSEC Upate URL.    
+By default this script behaves like the deSEC Update URL.    
 If there is an IPv4 or IPv6 detected, it will create A and/or AAAA record(s).    
 On the other hand, if IPv4 or IPv isn't detected, it will remove the corresponding records!   
 Yes, even records you manually created on the webGUI will be removed!  
