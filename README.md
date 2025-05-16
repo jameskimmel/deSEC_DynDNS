@@ -65,7 +65,7 @@ To test your config, run the script:
 ```
 
 ## run it automatically
-Depending on your OS, there are different way to repeatedly run your script.  
+Depending on your OS, there are different ways to repeatedly run your script.  
 In these examples, we use a 5min intervall.  
 
 ### Linux
@@ -81,7 +81,7 @@ Append at the end of the file:
 **Don't forget the change the path to your home directory.**  
 
 ### OPNsense
-SSH into your OPNsense and press the option 8 to enter the shell.  
+SSH into your OPNsense shell.  
 OPNsense does not have nano installed, so we use vi instead to edit files.  
 ```bash
 vi /usr/local/opnsense/service/conf/actions.d/actions_desecdyndns.conf
@@ -95,11 +95,16 @@ type:script
 message:run deSEC DynDNS
 description:deSEC DynDNS Update
 ```
-save and exit by pressing escape -> : -> wq -> enter
+save and exit by pressing esc -> : -> wq -> enter
 
 restart configd (or even better, reboot OPNsense)
 ```bash
 service configd restart
+```
+
+To test your config, run the script:  
+```bash
+./deSEC_DynDNS.sh
 ```
 
 If your script works, you can no leave the shell and go into the webGUI.  
@@ -112,4 +117,3 @@ Click save and you are done.
 
 ### macOS
 I think it should be done with launchd ~/Library/LaunchAgents, but I haven't had the time to look into it. Happy to implement your pull request. 
-
