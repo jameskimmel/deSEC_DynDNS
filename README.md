@@ -40,12 +40,12 @@ nano deSEC_DynDNS.sh
 ### Update logic of deSEC
 By default this script behaves like the deSEC Update URL.    
 If there is an IPv4 or IPv6 detected, it will create A and/or AAAA record(s).    
-On the other hand, if IPv4 or IPv isn't detected, it will remove the corresponding records!   
+On the other hand, if IPv4 or IPv6 isn't detected, it will remove the corresponding records!   
 Yes, even records you manually created on the webGUI will be removed!  
 Resoning for that behavior is that if you host looses an IP, you probably also want to delete the record.  
 This could potentially help you even noticing that there is a problem.  
-If you don't like that behavior, use the preserve option.  
-That why it will leave that IP untouched.  
+If you don't like that behavior, you can use the preserve option.  
+That way, it will leave the IPv4 or IPv6 untouched.  
 
 ### Preserve option
 This will set the update URL to preserve, thous not touching your current record.
