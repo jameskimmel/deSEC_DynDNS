@@ -92,7 +92,7 @@ if [ "$CHECK_IPV4" = true ]; then
 
 # If record isn't what IP we detected or if we found a record but could not establish
 # our IP, we need an update.
-  if [ "$DNS_IPV4" != "$IPV4" ] || [ "$IPV4_UNDETECTABLE" = "true" ]; then
+  if [ "$DNS_IPV4" != "$IPV4" ] || [ "$IPV4_UNDETECTABLE" = true ]; then
     UPDATE_NEEDED=true
   fi
 
@@ -118,7 +118,7 @@ if [ "$CHECK_IPV6" = true ]; then
 
 # If record isn't what IP we detected or if we found a record but could not establish
 # our IP, we need an update.
-  if [ "$DNS_IPV6" != "$IPV6" ] || [ "$IPV6_UNDETECTABLE" = "true" ]; then
+  if [ "$DNS_IPV6" != "$IPV6" ] || [ "$IPV6_UNDETECTABLE" = true ]; then
     UPDATE_NEEDED=true
   fi 
 
@@ -127,11 +127,11 @@ fi
 # If an update is needed, build the update URL
 if [ "$UPDATE_NEEDED" = true ]; then
   # Append IPs to update URL if protocol is enabled and IP was detectable
-  if [ "$SET_IPV4" = "true" ] && [ "$IPV4_UNDETECTABLE" = "false" ]; then
+  if [ "$SET_IPV4" = true ] && [ "$IPV4_UNDETECTABLE" = false ]; then
     UPDATE_URL="${UPDATE_URL}&myipv4=$IPV4"
   fi
 
-  if [ "$SET_IPV6" = "true" ] && [ "$IPV6_UNDETECTABLE" = "false" ]; then
+  if [ "$SET_IPV6" = true ] && [ "$IPV6_UNDETECTABLE" = false ]; then
     UPDATE_URL="${UPDATE_URL}&myipv6=$IPV6"
   fi
 
