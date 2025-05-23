@@ -92,7 +92,7 @@ if [ "$CHECK_IPV4" = true ]; then
 
 # If record isn't what IP we detected or if we found a record but could not establish
 # our IP, we need an update
-  if [[ "$DNS_IPV4" != "$IPV4" || $IPV4_UNDETECTABLE = true ]]; then
+  if [ "$DNS_IPV4" != "$IPV4" ] || [ "$IPV4_UNDETECTABLE" = "true" ]; then
     UPDATE_NEEDED=true
   fi
 
@@ -118,7 +118,7 @@ if [ "$CHECK_IPV6" = true ]; then
 
 # If record isn't what IP we detected or if we found a record but could not establish
 # our IP, we need an update
-  if [[ "$DNS_IPV6" != "$IPV6" || $IPV6_UNDETECTABLE = true ]]; then
+  if [ "$DNS_IPV6" != "$IPV6" ] || [ "$IPV6_UNDETECTABLE" = "true" ]; then
     UPDATE_NEEDED=true
   fi 
 
