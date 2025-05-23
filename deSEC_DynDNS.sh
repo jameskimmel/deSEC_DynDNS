@@ -5,8 +5,8 @@
 
 # Config:
 # Insert your domain name and the auth token.
-DOMAIN_NAME="yourdomain.com"
-TOKEN="1234"
+DOMAIN_NAME="InsertYourDomainHere"
+TOKEN="InsertYourTokenHere"
 
 # Preserve:
 # This will set the update URL to preserve, therefore not touching your current record.
@@ -38,9 +38,11 @@ CHECK_IPV6_URL="https://checkipv6.dedyn.io"
 CHECK_IPV4=true
 CHECK_IPV6=true
 
-# Start
+# Variables
 UPDATE_NEEDED=false
 UPDATE_URL="https://update.dedyn.io/?hostname=$DOMAIN_NAME"
+IPV4_UNDETECTABLE=false
+IPV6_UNDETECTABLE=false
 
 # To not overwhelm deSEC servers all at the same time  
 # we add a random delay. By using a delay between 10 and 290 seconds, we have at least a 10-second delay to the 5m mark.  
@@ -70,14 +72,14 @@ if [ "$PRESERVE_IPV6" = true ]; then
   IPV6="preserve"
 fi
 
-# Check if IPv4 changed
+# Check IPv4
 if [ "$CHECK_IPV4" = true ]; then
   IPV4=$($CURL_CMD -4 --connect-timeout 10 --max-time 10 "$CHECK_IPV4_URL")
   CURL_EXIT=$?
 
   if [ "$CURL_EXIT" -ne 0 ]; then
     echo "Failed to get your IPv4 from $CHECK_IPV4_URL. Curl error: $CURL_EXIT" >&2
-    exit 1
+    IPV4_UNDETECTABLE=true
   fi
 
   DNS_IPV4=$($DIG_CMD @$NAMESERVER1 +short "$DOMAIN_NAME" -t A | $HEAD_CMD -n 1)
@@ -88,19 +90,22 @@ if [ "$CHECK_IPV4" = true ]; then
     exit 1
   fi
 
-  if [ "$DNS_IPV4" != "$IPV4" ]; then
+# If record isn't what IP we detected or if we found a record but could not establish
+# our IP, we need an update
+  if [[ "$DNS_IPV4" != "$IPV4" || $IPV4_UNDETECTABLE = true ]]; then
     UPDATE_NEEDED=true
   fi
+
 fi
 
-# Check if IPv6 changed
+# Check IPv6
 if [ "$CHECK_IPV6" = true ]; then
   IPV6=$($CURL_CMD -6 --connect-timeout 10 --max-time 10 "$CHECK_IPV6_URL")
   CURL_EXIT=$?
 
   if [ "$CURL_EXIT" -ne 0 ]; then
     echo "Failed to get your IPv6 from $CHECK_IPV6_URL. Curl error: $CURL_EXIT" >&2
-    exit 1
+    IPV6_UNDETECTABLE=true
   fi
 
   DNS_IPV6=$($DIG_CMD @$NAMESERVER1 +short "$DOMAIN_NAME" -t AAAA | $HEAD_CMD -n 1)
@@ -111,19 +116,22 @@ if [ "$CHECK_IPV6" = true ]; then
     exit 1
   fi
 
-  if [ "$DNS_IPV6" != "$IPV6" ]; then
+# If record isn't what IP we detected or if we found a record but could not establish
+# our IP, we need an update
+  if [[ "$DNS_IPV6" != "$IPV6" || $IPV6_UNDETECTABLE = true ]]; then
     UPDATE_NEEDED=true
-  fi   
+  fi 
+
 fi
 
 # If an update is needed, build the update URL
 if [ "$UPDATE_NEEDED" = true ]; then
-  # Append IPs to update URL if enabled
-  if [ "$SET_IPV4" = true ]; then
+  # Append IPs to update URL if protocol is enabled and IP was detectable
+  if [[ "$SET_IPV4" = true && $IPV4_UNDETECTABLE = false ]]; then
     UPDATE_URL="${UPDATE_URL}&myipv4=$IPV4"
   fi
 
-  if [ "$SET_IPV6" = true ]; then
+  if [[ "$SET_IPV6" = true && $IPV6_UNDETECTABLE = false ]]; then
     UPDATE_URL="${UPDATE_URL}&myipv6=$IPV6"
   fi
 
@@ -141,9 +149,10 @@ if [ "$UPDATE_NEEDED" = true ]; then
     echo "Success! Successfully updated your record(s) by using this URL: $UPDATE_URL"
     exit 0
   else
-    echo "We tried it with this URL $UPDATE_URL. Instead of getting 200 as response, we got this error: $UPDATE_RESPONSE"
+    echo "We tried it with this URL $UPDATE_URL. Instead of getting "200" as response, we got this error: $UPDATE_RESPONSE"
     exit 1
   fi
+  
 else
   echo "No update needed."
   exit 0
