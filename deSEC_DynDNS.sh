@@ -72,7 +72,7 @@ fi
 
 # Check if IPv4 changed
 if [ "$CHECK_IPV4" = true ]; then
-  IPV4=$($CURL_CMD -s -4 --connect-timeout 10 --max-time 10 "$CHECK_IPV4_URL")
+  IPV4=$($CURL_CMD -4 --connect-timeout 10 --max-time 10 "$CHECK_IPV4_URL")
   CURL_EXIT=$?
 
   if [ "$CURL_EXIT" -ne 0 ]; then
@@ -95,7 +95,7 @@ fi
 
 # Check if IPv6 changed
 if [ "$CHECK_IPV6" = true ]; then
-  IPV6=$($CURL_CMD -s -6 --connect-timeout 10 --max-time 10 "$CHECK_IPV6_URL")
+  IPV6=$($CURL_CMD -6 --connect-timeout 10 --max-time 10 "$CHECK_IPV6_URL")
   CURL_EXIT=$?
 
   if [ "$CURL_EXIT" -ne 0 ]; then
@@ -128,7 +128,7 @@ if [ "$UPDATE_NEEDED" = true ]; then
   fi
 
   # Do the actual update 
-  UPDATE_RESPONSE=$($CURL_CMD -s --connect-timeout 10 --max-time 10 -w "%{http_code}" -o /dev/null --header "Authorization: Token $TOKEN" "$UPDATE_URL")
+  UPDATE_RESPONSE=$($CURL_CMD --connect-timeout 10 --max-time 10 -w "%{http_code}" -o /dev/null --header "Authorization: Token $TOKEN" "$UPDATE_URL")
   CURL_EXIT=$?
   
   if [ "$CURL_EXIT" -ne 0 ]; then
