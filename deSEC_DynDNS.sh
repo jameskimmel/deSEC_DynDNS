@@ -44,8 +44,8 @@ UPDATE_URL="https://update.dedyn.io/?hostname=$DOMAIN_NAME"
 IPV4_UNDETECTABLE=false
 IPV6_UNDETECTABLE=false
 
-# To not overwhelm deSEC servers all at the same time  
-# we add a random delay. By using a delay between 10 and 290 seconds, we have at least a 10-second delay to the 5m mark.  
+# To not overwhelm deSEC servers all at the same time
+# we add a random delay. By using a delay between 10 and 290 seconds, we have at least a 10-second delay to the 5m mark.
 MIN_DELAY=10
 MAX_DELAY=290
 RAND_NUM=$($OD_CMD -An -N2 -t u /dev/urandom | $AWK_CMD '{print $1}')
@@ -61,7 +61,7 @@ SET_IPV4="$CHECK_IPV4"
 SET_IPV6="$CHECK_IPV6"
 
 # Check if the preserve option is enabled.
-# If yes, disable the check and set the IP to preserve  
+# If yes, disable the check and set the IP to preserve.
 if [ "$PRESERVE_IPV4" = true ]; then
   CHECK_IPV4=false
   IPV4="preserve"
@@ -91,7 +91,7 @@ if [ "$CHECK_IPV4" = true ]; then
   fi
 
 # If record isn't what IP we detected or if we found a record but could not establish
-# our IP, we need an update
+# our IP, we need an update.
   if [ "$DNS_IPV4" != "$IPV4" ] || [ "$IPV4_UNDETECTABLE" = "true" ]; then
     UPDATE_NEEDED=true
   fi
@@ -117,7 +117,7 @@ if [ "$CHECK_IPV6" = true ]; then
   fi
 
 # If record isn't what IP we detected or if we found a record but could not establish
-# our IP, we need an update
+# our IP, we need an update.
   if [ "$DNS_IPV6" != "$IPV6" ] || [ "$IPV6_UNDETECTABLE" = "true" ]; then
     UPDATE_NEEDED=true
   fi 
@@ -127,11 +127,11 @@ fi
 # If an update is needed, build the update URL
 if [ "$UPDATE_NEEDED" = true ]; then
   # Append IPs to update URL if protocol is enabled and IP was detectable
-  if [[ "$SET_IPV4" = true && $IPV4_UNDETECTABLE = false ]]; then
+  if [ "$SET_IPV4" = "true" ] && [ "$IPV4_UNDETECTABLE" = "false" ]; then
     UPDATE_URL="${UPDATE_URL}&myipv4=$IPV4"
   fi
 
-  if [[ "$SET_IPV6" = true && $IPV6_UNDETECTABLE = false ]]; then
+  if [ "$SET_IPV6" = "true" ] && [ "$IPV6_UNDETECTABLE" = "false" ]; then
     UPDATE_URL="${UPDATE_URL}&myipv6=$IPV6"
   fi
 
