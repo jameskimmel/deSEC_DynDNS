@@ -37,13 +37,12 @@ Edit the domain and the token in the script with an editor you like. I use nano 
 ```bash
 nano deSEC_DynDNS.sh
 ```
-### Update logic of deSEC
-By default this script behaves like the deSEC Update URL.    
-If there is an IPv4 or IPv6 detected, it will create A and/or AAAA record(s).    
-On the other hand, if IPv4 or IPv6 isn't detected, it will remove the corresponding records!   
-Yes, even records you manually created on the webGUI will be removed!  
-Resoning for that behavior is that if you host looses an IP, you probably also want to delete the record.  
-This could potentially help you even noticing that there is a problem.  
+### Update logic of deSEC_DynDNS
+By default this script behaves like the deSEC Update URL.
+If there is an IPv4 or IPv6 detected, it will corresponding A and/or AAAA record(s).    
+On the other hand, if only a IPv4 or IPv6 is detected, it will create that and remove the other record you might have created manually in the WebGUI.  
+Resoning for that behavior is that if you host looses an IP, you probably also want to delete the record.
+This could potentially help you even noticing that there is a problem.
 If you don't like that behavior, you can use the preserve option.  
 That way, it will leave the IPv4 or IPv6 untouched.  
 
