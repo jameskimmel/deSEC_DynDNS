@@ -10,8 +10,8 @@ TOKEN="InsertYourTokenHere"
 
 # Preserve:
 # This will set the update URL to preserve, therefore not touching your current record.
-PRESERVE_IPV4=false
-PRESERVE_IPV6=false
+PRESERVE_IPV4='NO'
+PRESERVE_IPV6='NO'
 
 # Paths:
 # For Debian and Ubuntu, paths should already be correct.
@@ -28,21 +28,21 @@ HEAD_CMD='/usr/bin/head'
 # You should not need to change anything below this line!
 
 # Nameserver used for dig
-NAMESERVER1="ns1.desec.io"
+NAMESERVER1='ns1.desec.io'
 
 # Set url to determine your own IP
-CHECK_IPV4_URL="https://checkipv4.dedyn.io"
-CHECK_IPV6_URL="https://checkipv6.dedyn.io"
+CHECK_IPV4_URL='https://checkipv4.dedyn.io'
+CHECK_IPV6_URL='https://checkipv6.dedyn.io'
 
 # Disable IPv4 or IPv6
-CHECK_IPV4=true
-CHECK_IPV6=true
+CHECK_IPV4='YES'
+CHECK_IPV6='YES'
 
 # Variables
-UPDATE_NEEDED=false
+UPDATE_NEEDED='NO'
 UPDATE_URL="https://update.dedyn.io/?hostname=$DOMAIN_NAME"
-IPV4_UNDETECTABLE=false
-IPV6_UNDETECTABLE=false
+IPV4_UNDETECTABLE='NO'
+IPV6_UNDETECTABLE='NO'
 
 # To not overwhelm deSEC servers all at the same time
 # we add a random delay. By using a delay between 10 and 290 seconds, we have at least a 10-second delay to the 5m mark.
@@ -62,24 +62,24 @@ SET_IPV6="$CHECK_IPV6"
 
 # Check if the preserve option is enabled.
 # If yes, disable the check and set the IP to preserve.
-if [ "$PRESERVE_IPV4" = true ]; then
-  CHECK_IPV4=false
-  IPV4="preserve"
+if [ "$PRESERVE_IPV4" = 'YES' ]; then
+  CHECK_IPV4='NO'
+  IPV4='preserve'
 fi
 
-if [ "$PRESERVE_IPV6" = true ]; then
-  CHECK_IPV6=false
+if [ "$PRESERVE_IPV6" = 'YES' ]; then
+  CHECK_IPV6='NO'
   IPV6="preserve"
 fi
 
 # Check IPv4
-if [ "$CHECK_IPV4" = true ]; then
+if [ "$CHECK_IPV4" = 'YES' ]; then
   IPV4=$($CURL_CMD -4 --connect-timeout 10 --max-time 10 "$CHECK_IPV4_URL")
   CURL_EXIT=$?
 
   if [ "$CURL_EXIT" -ne 0 ]; then
     echo "Failed to get your IPv4 from $CHECK_IPV4_URL. Curl error: $CURL_EXIT" >&2
-    IPV4_UNDETECTABLE=true
+    IPV4_UNDETECTABLE='YES'
   fi
 
   DNS_IPV4=$($DIG_CMD @$NAMESERVER1 +short "$DOMAIN_NAME" -t A | $HEAD_CMD -n 1)
@@ -92,20 +92,20 @@ if [ "$CHECK_IPV4" = true ]; then
 
 # If record isn't what IP we detected or if we found a record but could not establish
 # our IP, we need an update.
-  if [ "$DNS_IPV4" != "$IPV4" ] || [ "$IPV4_UNDETECTABLE" = true ]; then
-    UPDATE_NEEDED=true
+  if [ "$DNS_IPV4" != "$IPV4" ] || [ "$IPV4_UNDETECTABLE" = 'YES' ]; then
+    UPDATE_NEEDED='YES'
   fi
 
 fi
 
 # Check IPv6
-if [ "$CHECK_IPV6" = true ]; then
+if [ "$CHECK_IPV6" = 'YES' ]; then
   IPV6=$($CURL_CMD -6 --connect-timeout 10 --max-time 10 "$CHECK_IPV6_URL")
   CURL_EXIT=$?
 
   if [ "$CURL_EXIT" -ne 0 ]; then
     echo "Failed to get your IPv6 from $CHECK_IPV6_URL. Curl error: $CURL_EXIT" >&2
-    IPV6_UNDETECTABLE=true
+    IPV6_UNDETECTABLE='YES'
   fi
 
   DNS_IPV6=$($DIG_CMD @$NAMESERVER1 +short "$DOMAIN_NAME" -t AAAA | $HEAD_CMD -n 1)
@@ -118,20 +118,20 @@ if [ "$CHECK_IPV6" = true ]; then
 
 # If record isn't what IP we detected or if we found a record but could not establish
 # our IP, we need an update.
-  if [ "$DNS_IPV6" != "$IPV6" ] || [ "$IPV6_UNDETECTABLE" = true ]; then
-    UPDATE_NEEDED=true
+  if [ "$DNS_IPV6" != "$IPV6" ] || [ "$IPV6_UNDETECTABLE" = 'YES' ]; then
+    UPDATE_NEEDED='YES'
   fi 
 
 fi
 
 # If an update is needed, build the update URL
-if [ "$UPDATE_NEEDED" = true ]; then
+if [ "$UPDATE_NEEDED" = 'YES' ]; then
   # Append IPs to update URL if protocol is enabled and IP was detectable
-  if [ "$SET_IPV4" = true ] && [ "$IPV4_UNDETECTABLE" = false ]; then
+  if [ "$SET_IPV4" = 'YES' ] && [ "$IPV4_UNDETECTABLE" = 'NO' ]; then
     UPDATE_URL="${UPDATE_URL}&myipv4=$IPV4"
   fi
 
-  if [ "$SET_IPV6" = true ] && [ "$IPV6_UNDETECTABLE" = false ]; then
+  if [ "$SET_IPV6" = 'YES' ] && [ "$IPV6_UNDETECTABLE" = 'NO' ]; then
     UPDATE_URL="${UPDATE_URL}&myipv6=$IPV6"
   fi
 
