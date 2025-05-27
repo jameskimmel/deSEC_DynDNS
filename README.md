@@ -37,25 +37,24 @@ Edit the domain and the token in the script with an editor you like. I use nano 
 ```bash
 nano deSEC_DynDNS.sh
 ```
-### Update logic of deSEC_DynDNS
-By default this script behaves like the deSEC Update URL.
-If there is an IPv4 or IPv6 detected, it will corresponding A and/or AAAA record(s).    
-On the other hand, if only a IPv4 or IPv6 is detected, it will create that and remove the other record you might have created manually in the WebGUI.  
-Resoning for that behavior is that if you host looses an IP, you probably also want to delete the record.
-This could potentially help you even noticing that there is a problem.
+### Update logic
+This script tries to detect our IPv4 and IPv6 and set it in the Update URL.
+By setting IPv4 and IPv6 in the update URL, instead of relying on what the deSEC update server detects, we are protected against man in the middle attacks.  
+
+If the script can't detect an IPv4 or IPv6, it will leave it empty (and because of that potentially prone to MITM attacks). That way the corresponding A or AAAA record gets deleted. Even manually created records on the webGUI will get deleted.
+This could potentially help you even noticing that there is a problem, when for whatever reason your host looses IPv4 or IPv6.
 If you don't like that behavior, you can use the preserve option.  
-That way, it will leave the IPv4 or IPv6 untouched.  
+That way, it will leave the IPv4 or IPv6 untouched and the script will not check for IP changes for that protocol.  
+
+If you want an A record but no AAAA record or vice versa, you should can make use of the preserve option.  
 
 ### Preserve option
-This will set the update URL to preserve, thous not touching your current record.
-It will also disable checks for that protocol, since they are no longer needed when preserving the IP.  
+This will set the update URL for that IP to preserve, thous not create, modify or delete records for that IP protocol.  
+It will also disable checks for that protocol, since they are no longer needed in that case.  
 
 ### Command paths
 For Debian and Ubuntu the paths should already be correct.
 For OPNsense and macOS, you have to adjust them. 
-
-### Disable a protocol
-If you for whatever obscure reasons don't want to enable a protocol, you can disable it.  
 
 ## Test your config
 To test your config, run the script:  
