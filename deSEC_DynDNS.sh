@@ -137,7 +137,7 @@ if [ "$UPDATE_NEEDED" = 'YES' ]; then
   fi
 
   # Do the actual update 
-  UPDATE_RESPONSE=$($CURL_CMD --connect-timeout 10 --max-time 10 -w "%{http_code}" -o /dev/null --header "Authorization: Token $TOKEN" "$UPDATE_URL")
+  UPDATE_RESPONSE=$($CURL_CMD --connect-timeout 10 --max-time 10 --header "Authorization: Token $TOKEN" "$UPDATE_URL")
   CURL_EXIT=$?
   
   if [ "$CURL_EXIT" -ne 0 ]; then
@@ -145,8 +145,8 @@ if [ "$UPDATE_NEEDED" = 'YES' ]; then
     exit 1
   fi
 
-  # Check if the response of our update request is 200
-  if [ "$UPDATE_RESPONSE" -eq 200 ]; then
+  # Check if the update worked and we got 'good' as answer
+  if [ "$UPDATE_RESPONSE" = 'good' ]; then
     echo "Success! Successfully updated your record(s) by using this URL: $UPDATE_URL"
     exit 0
   else
