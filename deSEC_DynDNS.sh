@@ -1,12 +1,13 @@
 #!/bin/sh
 
 # Simple DynDNS script for deSEC.io.
+# Version 1.0
 # https://github.com/jameskimmel/deSEC_DynDNS
 
 # Config:
 # Insert your domain name and the auth token.
-DOMAIN_NAME="InsertYourDomainHere"
-TOKEN="InsertYourTokenHere"
+DOMAIN_NAME='InsertYourDomainHere'
+TOKEN='InsertYourTokenHere'
 
 # Preserve:
 # This will set the update URL to preserve, therefore not touching your current record.
@@ -50,7 +51,7 @@ MIN_DELAY=10
 MAX_DELAY=290
 RAND_NUM=$($OD_CMD -An -N2 -t u /dev/urandom | $AWK_CMD '{print $1}')
 RANDOM_DELAY=$((MIN_DELAY + RAND_NUM % (MAX_DELAY - MIN_DELAY + 1)))
-$SLEEP_CMD "$RANDOM_DELAY"
+$SLEEP_CMD $RANDOM_DELAY
 
 # Preserve logic:
 # If we have a preserve option set to true, we don't want to check for updates for that IP.
@@ -69,7 +70,7 @@ fi
 
 if [ "$PRESERVE_IPV6" = 'YES' ]; then
   CHECK_IPV6='NO'
-  IPV6="preserve"
+  IPV6='preserve'
 fi
 
 # Check IPv4
