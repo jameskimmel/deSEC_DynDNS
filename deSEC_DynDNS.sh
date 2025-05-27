@@ -150,7 +150,7 @@ if [ "$UPDATE_NEEDED" = 'YES' ]; then
     echo "Success! Successfully updated your record(s) by using this URL: $UPDATE_URL"
     exit 0
   else
-    echo "We tried it with this URL $UPDATE_URL. Instead of getting "200" as response, we got this error: $UPDATE_RESPONSE"
+    echo "We tried it with this URL $UPDATE_URL. Instead of getting "good" as response, we got this: $UPDATE_RESPONSE"
     exit 1
   fi
   
