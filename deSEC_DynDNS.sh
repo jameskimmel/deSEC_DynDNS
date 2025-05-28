@@ -62,7 +62,7 @@ if [ "$PRESERVE_IPV4" = 'NO' ]; then
   CURL_EXIT=$?
 
   # If curl returned an error, we set IPv4 to undetected
-  if [ "$CURL_EXIT" -ne 0 ]; then
+  if [ $CURL_EXIT -ne 0 ]; then
     echo "Failed to get your IPv4 from $CHECK_IPV4_URL. Curl error: $CURL_EXIT" >&2
     IPV4_UNDETECTABLE='YES'
   fi
@@ -72,7 +72,7 @@ if [ "$PRESERVE_IPV4" = 'NO' ]; then
   DIG_EXIT=$?
 
   # If we can't connect to the DNS server, we have a serious issue and exit the programm
-  if [ "$DIG_EXIT" -ne 0 ]; then
+  if [ $DIG_EXIT -ne 0 ]; then
     echo "Failed to get a response from $NAMESERVER1. Dig error: $DIG_EXIT" >&2
     exit 1
   fi
@@ -91,7 +91,7 @@ if [ "$PRESERVE_IPV6" = 'NO' ]; then
   CURL_EXIT=$?
 
   # If curl returned an error, we set IPv6 to undetected
-  if [ "$CURL_EXIT" -ne 0 ]; then
+  if [ $CURL_EXIT -ne 0 ]; then
     echo "Failed to get your IPv6 from $CHECK_IPV6_URL. Curl error: $CURL_EXIT" >&2
     IPV6_UNDETECTABLE='YES'
   fi
@@ -101,7 +101,7 @@ if [ "$PRESERVE_IPV6" = 'NO' ]; then
   DIG_EXIT=$?
 
   # If we can't connect to the DNS server, we have a serious issue and exit the programm
-  if [ "$DIG_EXIT" -ne 0 ]; then
+  if [ $DIG_EXIT -ne 0 ]; then
     echo "Failed to retrieve an AAAA record from $NAMESERVER1. Dig error: $DIG_EXIT" >&2
     exit 1
   fi
@@ -133,7 +133,7 @@ if [ "$UPDATE_NEEDED" = 'YES' ]; then
   UPDATE_RESPONSE=$($CURL_CMD --connect-timeout 10 --max-time 10 --header "Authorization: Token $TOKEN" "$UPDATE_URL")
   CURL_EXIT=$?
   
-  if [ "$CURL_EXIT" -ne 0 ]; then
+  if [ $CURL_EXIT -ne 0 ]; then
     echo "Error! Used curl with $UPDATE_URL as update URL, but failed. Curl error $CURL_EXIT" >&2
     exit 1
   fi
