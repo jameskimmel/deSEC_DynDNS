@@ -46,9 +46,7 @@ IPV6_UNDETECTABLE='NO'
 # we add a random delay. By using a delay between 10 and 290 seconds, we have at least a 10-second delay to the 5m mark.
 MIN_DELAY=10
 MAX_DELAY=290
-RAND_NUM=$($OD_CMD -An -N2 -t u /dev/urandom | $AWK_CMD '{print $1}')
-RANDOM_DELAY=$((MIN_DELAY + RAND_NUM % (MAX_DELAY - MIN_DELAY + 1)))
-$SLEEP_CMD $RANDOM_DELAY
+$SLEEP_CMD $($AWK_CMD -v mi=$MIN_DELAY -v ma=$MAX_DELAY 'BEGIN{srand(); print int(mi+rand()*(ma-mi+1))}')
 
 # It the preserve option is enabled, we set the IP to 'preserve'
 if [ "$PRESERVE_IPV4" != 'NO' ]; then
