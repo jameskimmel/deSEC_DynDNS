@@ -22,7 +22,6 @@ PRESERVE_IPV6='NO'
 # For macOS, sleep should be located at /bin/sleep
 DIG_CMD='/usr/bin/dig'
 CURL_CMD='/usr/bin/curl'
-OD_CMD='/usr/bin/od'
 AWK_CMD='/usr/bin/awk'
 SLEEP_CMD='/usr/bin/sleep'
 HEAD_CMD='/usr/bin/head'
@@ -46,9 +45,7 @@ IPV6_UNDETECTABLE='NO'
 # we add a random delay. By using a delay between 10 and 290 seconds, we have at least a 10-second delay to the 5m mark.
 MIN_DELAY=10
 MAX_DELAY=290
-RAND_NUM=$($OD_CMD -An -N2 -t u /dev/urandom | $AWK_CMD '{print $1}')
-RANDOM_DELAY=$((MIN_DELAY + RAND_NUM % (MAX_DELAY - MIN_DELAY + 1)))
-$SLEEP_CMD $RANDOM_DELAY
+$SLEEP_CMD $($AWK_CMD -v mi=$MIN_DELAY -v ma=$MAX_DELAY 'BEGIN{srand(); print int(mi+rand()*(ma-mi+1))}')
 
 # It the preserve option is enabled, we set the IP to 'preserve'
 if [ "$PRESERVE_IPV4" != 'NO' ]; then
@@ -65,7 +62,7 @@ if [ "$PRESERVE_IPV4" = 'NO' ]; then
   CURL_EXIT=$?
 
   # If curl returned an error, we set IPv4 to undetected
-  if [ "$CURL_EXIT" -ne 0 ]; then
+  if [ $CURL_EXIT -ne 0 ]; then
     echo "Failed to get your IPv4 from $CHECK_IPV4_URL. Curl error: $CURL_EXIT" >&2
     IPV4_UNDETECTABLE='YES'
   fi
@@ -75,7 +72,7 @@ if [ "$PRESERVE_IPV4" = 'NO' ]; then
   DIG_EXIT=$?
 
   # If we can't connect to the DNS server, we have a serious issue and exit the programm
-  if [ "$DIG_EXIT" -ne 0 ]; then
+  if [ $DIG_EXIT -ne 0 ]; then
     echo "Failed to get a response from $NAMESERVER1. Dig error: $DIG_EXIT" >&2
     exit 1
   fi
@@ -94,7 +91,7 @@ if [ "$PRESERVE_IPV6" = 'NO' ]; then
   CURL_EXIT=$?
 
   # If curl returned an error, we set IPv6 to undetected
-  if [ "$CURL_EXIT" -ne 0 ]; then
+  if [ $CURL_EXIT -ne 0 ]; then
     echo "Failed to get your IPv6 from $CHECK_IPV6_URL. Curl error: $CURL_EXIT" >&2
     IPV6_UNDETECTABLE='YES'
   fi
@@ -104,7 +101,7 @@ if [ "$PRESERVE_IPV6" = 'NO' ]; then
   DIG_EXIT=$?
 
   # If we can't connect to the DNS server, we have a serious issue and exit the programm
-  if [ "$DIG_EXIT" -ne 0 ]; then
+  if [ $DIG_EXIT -ne 0 ]; then
     echo "Failed to retrieve an AAAA record from $NAMESERVER1. Dig error: $DIG_EXIT" >&2
     exit 1
   fi
@@ -136,7 +133,7 @@ if [ "$UPDATE_NEEDED" = 'YES' ]; then
   UPDATE_RESPONSE=$($CURL_CMD --connect-timeout 10 --max-time 10 --header "Authorization: Token $TOKEN" "$UPDATE_URL")
   CURL_EXIT=$?
   
-  if [ "$CURL_EXIT" -ne 0 ]; then
+  if [ $CURL_EXIT -ne 0 ]; then
     echo "Error! Used curl with $UPDATE_URL as update URL, but failed. Curl error $CURL_EXIT" >&2
     exit 1
   fi
