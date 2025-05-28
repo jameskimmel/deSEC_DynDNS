@@ -22,7 +22,6 @@ PRESERVE_IPV6='NO'
 # For macOS, sleep should be located at /bin/sleep
 DIG_CMD='/usr/bin/dig'
 CURL_CMD='/usr/bin/curl'
-OD_CMD='/usr/bin/od'
 AWK_CMD='/usr/bin/awk'
 SLEEP_CMD='/usr/bin/sleep'
 HEAD_CMD='/usr/bin/head'
