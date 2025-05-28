@@ -49,7 +49,7 @@ That way, it will leave the IPv4 or IPv6 untouched and the script will not check
 If you want an A record but no AAAA record or vice versa, you should can make use of the preserve option.  
 
 ### Preserve option
-This will set the update URL for that IP to preserve, thous not create, modify or delete records for that IP protocol.  
+This will set the update URL for that IP to preserve, thus not create, modify or delete records for that IP protocol.  
 It will also disable checks for that protocol, since they are no longer needed in that case.  
 
 ### Command paths
