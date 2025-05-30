@@ -35,8 +35,8 @@ NAMESERVER_BACKUP='1.1.1.1'
 # Set URLs to determine your own IP
 CHECK_IPV4_URL='https://checkipv4.dedyn.io'
 CHECK_IPV6_URL='https://checkipv6.dedyn.io'
-CHECK_IPV4_URL_BACKUP='https://api4.ipify.org'
-CHECK_IPV6_URL_BACKUP='https://api6.ipify.org'
+CHECK_IPV4_URL_BACKUP='https://checkipv4.salzmann.solutions'
+CHECK_IPV6_URL_BACKUP='https://checkipv6.salzmann.solutions'
 
 # Variables
 UPDATE_URL="https://update.dedyn.io/?hostname=$DOMAIN_NAME"
