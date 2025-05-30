@@ -38,11 +38,9 @@ Edit the domain and the token in the script with an editor you like. I use nano 
 nano deSEC_DynDNS.sh
 ```
 ### Update logic
-This script tries to detect our IPv4 and IPv6 and set it in the Update URL.
-By setting IPv4 and IPv6 in the update URL, instead of relying on what the deSEC update server detects, we are protected against man in the middle attacks.  
-
-If the script can't detect an IPv4 or IPv6, it will leave it empty (and because of that potentially prone to MITM attacks). That way the corresponding A or AAAA record gets deleted. Even manually created records on the webGUI will get deleted.
-This could potentially help you even noticing that there is a problem, when for whatever reason your host looses IPv4 or IPv6.
+This script tries to detect our IPv4 and IPv6 and set it in the Update URL.  
+If the script can't detect an IPv4 or IPv6, it will leave it empty. That way, a possible stale A or AAAA record on deSEC will get deleted, if deSEC also does not detect an IP. Even manually created records on the webGUI will get deleted  
+This could potentially help you even noticing that there is a problem, when for whatever reason your host looses IPv4 or IPv6.  
 If you don't like that behavior, you can use the preserve option.  
 That way, it will leave the IPv4 or IPv6 untouched and the script will not check for IP changes for that protocol.  
 
@@ -51,6 +49,7 @@ If you want an A record but no AAAA record or vice versa, you should can make us
 ### Preserve option
 This will set the update URL for that IP to preserve, thus not create, modify or delete records for that IP protocol.  
 It will also disable checks for that protocol, since they are no longer needed in that case.  
+If you have a static IPv4 or IPv6 prefix, you could set this to preserve
 
 ### Command paths
 For Debian and Ubuntu the paths should already be correct.
