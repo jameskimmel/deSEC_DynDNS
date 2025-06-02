@@ -9,12 +9,6 @@
 DOMAIN_NAME='InsertYourDomainHere'
 TOKEN='InsertYourTokenHere'
 
-# Preserve:
-# This will set the update URL to preserve, therefore not touching your current record.
-# Please insert 'YES' or 'NO'
-PRESERVE_IPV4='NO'
-PRESERVE_IPV6='NO'
-
 # Paths:
 # For Debian and Ubuntu, paths should already be correct.
 # Use the command "which", to find out where these commands are located on your OS.
@@ -25,18 +19,28 @@ CURL_CMD='/usr/bin/curl'
 SLEEP_CMD='/usr/bin/sleep'
 AWK_CMD='/usr/bin/awk'
 HEAD_CMD='/usr/bin/head'
+OD_CMD='/usr/bin/od'
 
-# You should not need to change anything below this line!
+# Preserve:
+# This will set the update URL to preserve, therefore not touching your current record.
+# Please insert 'YES' or 'NO'
+PRESERVE_IPV4='NO'
+PRESERVE_IPV6='NO'
 
-# Nameservers for dig
+# Nameservers for dig to check your A and AAAA record. If for some reason the deSEC DNS server isn't working, we use
+# Cloudflare as backup DNS server.
 NAMESERVER='ns1.desec.io'
 NAMESERVER_BACKUP='1.1.1.1'
 
 # Set URLs to determine your own IP
+# My backup servers don't do access log, but from an uptime perspective, you are probably better off using
+# other providers like https://api4.ipify.org and https://api6.ipify.org instead.
 CHECK_IPV4_URL='https://checkipv4.dedyn.io'
 CHECK_IPV6_URL='https://checkipv6.dedyn.io'
 CHECK_IPV4_URL_BACKUP='https://checkipv4.salzmann.solutions'
 CHECK_IPV6_URL_BACKUP='https://checkipv6.salzmann.solutions'
+
+# You should not need to change anything below this line!
 
 # Variables
 UPDATE_URL="https://update.dedyn.io/?hostname=$DOMAIN_NAME"
@@ -48,7 +52,9 @@ IPV6_UNDETECTABLE='NO'
 # we add a random delay. By using a delay between 10 and 290 seconds, we have at least a 10-second delay to the 5m mark.
 MIN_DELAY=10
 MAX_DELAY=290
-$SLEEP_CMD $($AWK_CMD -v mi=$MIN_DELAY -v ma=$MAX_DELAY 'BEGIN{srand(); print int(mi+rand()*(ma-mi+1))}')
+RAND_NUM=$($OD_CMD -An -N2 -t u /dev/urandom | $AWK_CMD '{print $1}')
+RANDOM_DELAY=$((MIN_DELAY + RAND_NUM % (MAX_DELAY - MIN_DELAY + 1)))
+$SLEEP_CMD $RANDOM_DELAY
 
 # It the preserve option is enabled, we set the IP to 'preserve'
 if [ "$PRESERVE_IPV4" != 'NO' ]; then

@@ -2,11 +2,22 @@
 
 **deSEC_DynDNS** is a simple DynDNS script for [deSEC.io](https://desec.io) that updates your DNS records only when your IP address changes.  
 
-This script depends on **curl** and **dig** (from `bind-tools` on some systems).  
+This script depends on **curl** and **dig** (from `bind-tools` on BSD systems).   
 
 Tested on **Debian 12**, **Ubuntu 24.04.2 LTS**, **macOS 15.4.1**, and **OPNsense 25.1.5 (FreeBSD 14.2)**  
 
 Feel free to contribute support for other environments, improvements, suggestions or correct my spelling mistakes :blush:    
+
+## Update logic
+This script tries to detect our IPv4 and IPv6 and set it in the Update URL.  
+If the script can't detect an IPv4 or IPv6, it will leave it empty. That way, a possible stale A or AAAA record on deSEC will get deleted, if deSEC also does not detect an IP. Even manually created records on the webGUI will get deleted.  
+This could potentially help you even noticing that there is a problem, when for whatever reason your host looses IPv4 or IPv6.  
+If you don't like that behavior, you can use the preserve option.  
+That way, it will leave the IPv4 or IPv6 untouched and the script will not check for IP changes for that protocol.  
+
+If you only want an A record but no AAAA record or vice versa, you should make use of the preserve option.  
+
+If you have a static IPv4 or IPv6 prefix, you can also make use of the preserve option to not waste resources.  
 
 ## Prepare Ubuntu/Debian:
 ```bash
@@ -37,23 +48,13 @@ Edit the domain and the token in the script with an editor you like. I use nano 
 ```bash
 nano deSEC_DynDNS.sh
 ```
-### Update logic
-This script tries to detect our IPv4 and IPv6 and set it in the Update URL.  
-If the script can't detect an IPv4 or IPv6, it will leave it empty. That way, a possible stale A or AAAA record on deSEC will get deleted, if deSEC also does not detect an IP. Even manually created records on the webGUI will get deleted  
-This could potentially help you even noticing that there is a problem, when for whatever reason your host looses IPv4 or IPv6.  
-If you don't like that behavior, you can use the preserve option.  
-That way, it will leave the IPv4 or IPv6 untouched and the script will not check for IP changes for that protocol.  
-
-If you want an A record but no AAAA record or vice versa, you should can make use of the preserve option.  
+### Command paths
+For Debian and Ubuntu the paths should already be correct.
+For OPNsense and macOS, you have to adjust them. 
 
 ### Preserve option
 This will set the update URL for that IP to preserve, thus not create, modify or delete records for that IP protocol.  
 It will also disable checks for that protocol, since they are no longer needed in that case.  
-If you have a static IPv4 or IPv6 prefix, you could set this to preserve
-
-### Command paths
-For Debian and Ubuntu the paths should already be correct.
-For OPNsense and macOS, you have to adjust them. 
 
 ## Test your config
 To test your config, run the script:  
