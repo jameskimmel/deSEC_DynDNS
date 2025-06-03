@@ -2,8 +2,6 @@
 
 **deSEC_DynDNS** is a simple DynDNS script for [deSEC.io](https://desec.io) that updates your DNS records only when your IP address changes.  
 
-This script depends on **curl** and **dig** (from `bind-tools` on BSD systems).   
-
 Tested on **Debian 12**, **Ubuntu 24.04.2 LTS**, **macOS 15.4.1**, and **OPNsense 25.1.5 (FreeBSD 14.2)**  
 
 Feel free to contribute support for other environments, improvements, suggestions or correct my spelling mistakes :blush:    
