@@ -42,7 +42,6 @@ chmod +x deSEC_DynDNS.sh
 
 ## Configure 
 On [deSEC.io](https://desec.io), create your auth token.  
-Make sure that you have already created the A and/or AAAA records, since the auth token is by default not allowed to do that.  
 
 Edit the domain and the token in the script with an editor you like. I use nano as an example.  
 ```bash
