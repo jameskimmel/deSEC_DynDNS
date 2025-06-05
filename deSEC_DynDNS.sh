@@ -84,7 +84,7 @@ if [ "$PRESERVE_IPV4" = 'NO' ]; then
 
   fi
 
-  # Get the A record 
+  # Get the A record
   DNS_IPV4=$($DIG_CMD @$NAMESERVER +short "$DOMAIN_NAME" -t A | $HEAD_CMD -n 1)
   DIG_EXIT=$?
 
@@ -128,8 +128,8 @@ if [ "$PRESERVE_IPV6" = 'NO' ]; then
     fi
 
   fi
-  
-  # Get the AAAA record 
+
+  # Get the AAAA record
   DNS_IPV6=$($DIG_CMD @$NAMESERVER +short "$DOMAIN_NAME" -t AAAA | $HEAD_CMD -n 1)
   DIG_EXIT=$?
 
@@ -151,7 +151,7 @@ if [ "$PRESERVE_IPV6" = 'NO' ]; then
   # our IP, we need an update.
   if [ "$DNS_IPV6" != "$IPV6" ] || [ "$IPV6_UNDETECTABLE" = 'YES' ]; then
     UPDATE_NEEDED='YES'
-  fi 
+  fi
 
 fi
 
@@ -159,7 +159,7 @@ fi
 if [ "$UPDATE_NEEDED" = 'YES' ]; then
 
   # When the IPv4 or IPv6 was detectable, we set it into the update url.
-  # If not, we will leave it empty. 
+  # If not, we will leave it empty.
   # That way, the deSEC update server decides based on what it detects.
 
   if [ "$IPV4_UNDETECTABLE" = 'NO' ]; then
@@ -170,11 +170,11 @@ if [ "$UPDATE_NEEDED" = 'YES' ]; then
     UPDATE_URL="${UPDATE_URL}&myipv6=$IPV6"
   fi
 
-  # Do the actual update 
+  # Do the actual update
   UPDATE_RESPONSE=$($CURL_CMD --connect-timeout 10 --max-time 10 --header "Authorization: Token $TOKEN" "$UPDATE_URL")
   CURL_EXIT=$?
   
-  if [ $CURL_EXIT -ne 0 ]; then
+    if [ $CURL_EXIT -ne 0 ]; then
     echo "Error! Used curl with $UPDATE_URL as update URL, but failed. Curl error $CURL_EXIT" >&2
     exit 1
   fi
@@ -187,7 +187,7 @@ if [ "$UPDATE_NEEDED" = 'YES' ]; then
     echo "Error! Used this URL $UPDATE_URL, but instead of getting 'good' as response, we got this: $UPDATE_RESPONSE"
     exit 1
   fi
-  
+
 else
   echo 'No update needed.'
   exit 0
