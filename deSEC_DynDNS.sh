@@ -173,7 +173,7 @@ if [ "$UPDATE_NEEDED" = 'YES' ]; then
   # Do the actual update
   UPDATE_RESPONSE=$($CURL_CMD --connect-timeout 10 --max-time 10 --header "Authorization: Token $TOKEN" "$UPDATE_URL")
   CURL_EXIT=$?
-  
+
     if [ $CURL_EXIT -ne 0 ]; then
     echo "Error! Used curl with $UPDATE_URL as update URL, but failed. Curl error $CURL_EXIT" >&2
     exit 1
