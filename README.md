@@ -7,15 +7,24 @@ Tested on **Debian 12**, **Ubuntu 24.04.2 LTS**, **macOS 15.4.1**, and **OPNsens
 Feel free to contribute support for other environments, improvements, suggestions or correct my spelling mistakes :blush:    
 
 ## Update logic
-This script tries to detect our IPv4 and IPv6 and set it in the Update URL.  
-If the script can't detect an IPv4 or IPv6, it will leave it empty. That way, a possible stale A or AAAA record on deSEC will get deleted, if deSEC also does not detect an IP. Even manually created records on the webGUI will get deleted.  
-This could potentially help you even noticing that there is a problem, when for whatever reason your host looses IPv4 or IPv6.  
-If you don't like that behavior, you can use the preserve option.  
-That way, it will leave the IPv4 or IPv6 untouched and the script will not check for IP changes for that protocol.  
+If you issue an update request to the deSEC update url, deSEC will try to detect what IPs you have and set them accordingly.    
 
-If you only want an A record but no AAAA record or vice versa, you should make use of the preserve option.  
+This script behaves differently. It first detects your IPs and checks if they are different from the current records.  
+If that is the case, it will not simply issue the update URL and let deSEC guess what IPs you have, instead it will issue the update URL with the detected IPs coded in.  
 
-If you have a static IPv4 or IPv6 prefix, you can also make use of the preserve option to not waste resources.  
+If the script can't detect an IP, it will leave it empty. If it is empty and the deSEC update url also can't detect an IP, it will get deleted. This will even be the case for records you created manually in the webGUI. That way stale records will get deleted. This might even help you noticing that there is a problem, when for whatever reason your host lost its IPv4 or IPv6.  
+
+If you don't like that behavior for some reasons, you can set PRESERVE_IPV4 or PRESERVE_IPV6 to "YES".  
+This will add the preserve option in the update URL and leave manually created records in the webGUI or stale records untouched. Because of that, it will also completly disable any checks for that procotol.
+
+If you want to disable IPv4 or IPv6, you can set DISABLE_IPV4 or DISABLE_IPV4 to "YES". The only thing this will do, is setting the preserve option to "YES", so it is mostly a setting for people that ignored the read me and how "preserve" works 😄
+
+Notes on IPv4:
+- This script is unable to detect if have a real public IP4 or if you suffer from [CG-NAT](https://desec.io)!
+
+Notes on IPv6: 
+- Watch out for IPv6 privacy extensions. Your host might have multiple IPv6 but use the none static IPv6 privacy extension enabled IPv6 for this script instead of the static one.
+- Almost all ISP offer you a static /56 or /48 prefix, so you most likely should not need DynDNS for IPv6. 
 
 ## Prepare Ubuntu/Debian:
 ```bash

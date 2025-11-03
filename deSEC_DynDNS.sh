@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Simple DynDNS script for deSEC.io.
-# Version 1.1
+# Version 1.2
 # https://github.com/jameskimmel/deSEC_DynDNS
 
 # Config:
@@ -11,9 +11,9 @@ TOKEN='InsertYourTokenHere'
 
 # Paths:
 # For Debian and Ubuntu, paths should already be correct.
-# Use the command "which", to find out where these commands are located on your OS.
 # For OPNsense, dig and curl should be located at /usr/local/bin/ and sleep should be located at /bin/sleep
 # For macOS, sleep should be located at /bin/sleep
+# Use the command "which", to find out where these commands are located on your OS.
 DIG_CMD='/usr/bin/dig'
 CURL_CMD='/usr/bin/curl'
 SLEEP_CMD='/usr/bin/sleep'
@@ -27,13 +27,19 @@ OD_CMD='/usr/bin/od'
 PRESERVE_IPV4='NO'
 PRESERVE_IPV6='NO'
 
+# Disable protocol:
+# This will disable IPv4 or IPv6
+# Please insert 'YES' or 'NO'
+DISABLE_IPV4='NO'
+DISABLE_IPV6='NO'
+
 # Nameservers for dig to check your A and AAAA record. If for some reason the deSEC DNS server isn't working, we use
 # Cloudflare as backup DNS server.
 NAMESERVER='ns1.desec.io'
 NAMESERVER_BACKUP='1.1.1.1'
 
 # Set URLs to determine your own IP
-# My backup servers don't do access log, but from an uptime perspective, you are probably better off using
+# My servers don't log, but from an uptime perspective, you are probably better off using
 # other providers like https://api4.ipify.org and https://api6.ipify.org instead.
 CHECK_IPV4_URL='https://checkipv4.dedyn.io'
 CHECK_IPV6_URL='https://checkipv6.dedyn.io'
@@ -49,6 +55,23 @@ UPDATE_URL="https://update.dedyn.io/?hostname=$DOMAIN_NAME"
 UPDATE_NEEDED='NO'
 IPV4_UNDETECTABLE='NO'
 IPV6_UNDETECTABLE='NO'
+
+# Disable IPv4 or IPv6 by setting the preserve option to YES.
+# This is only done for people that did not read the instructions properly and want to disable one protocol.
+# The behavior of preserve and disable is exactly the same, both disable checks and do not touch the records by adding 'preserve' to the update URL.
+if [ "$DISABLE_IPV4" != 'NO' ]; then
+  PRESERVE_IPV4='YES'
+fi
+
+if [ "$DISABLE_IPV6" != 'NO' ]; then
+  PRESERVE_IPV6='YES'
+fi
+
+# if both protocols are disabled, exit the script
+if [ "$PRESERVE_IPV4" != 'NO' ] && [ "$PRESERVE_IPV6" != 'NO' ]; then
+  echo "Both IPv4 and IPv6 are set to \"preserved\" or to \"disabled\". That makes no sense. Exiting script."
+      exit 1
+fi
 
 # To not overwhelm deSEC servers all at the same time
 # we add a random delay. By using a delay between 10 and 290 seconds, we have at least a 10-second delay to the 5m mark.
@@ -105,7 +128,7 @@ if [ "$PRESERVE_IPV4" = 'NO' ]; then
   fi
 
   # If the A record isn't what IPv4 we detected or if we found a record but could not determine
-  # our IP, we need an update.
+  # our IPv4, we need an update.
   if [ "$DNS_IPV4" != "$IPV4" ] || [ "$IPV4_UNDETECTABLE" = 'YES' ]; then
     UPDATE_NEEDED='YES'
   fi
@@ -150,7 +173,7 @@ if [ "$PRESERVE_IPV6" = 'NO' ]; then
   fi
 
   # If the AAAA record isn't what IPv6 we detected or if we found a record but could not establish
-  # our IP, we need an update.
+  # our IPv6, we need an update.
   if [ "$DNS_IPV6" != "$IPV6" ] || [ "$IPV6_UNDETECTABLE" = 'YES' ]; then
     UPDATE_NEEDED='YES'
   fi
@@ -161,8 +184,7 @@ fi
 if [ "$UPDATE_NEEDED" = 'YES' ]; then
 
   # When the IPv4 or IPv6 was detectable, we set it into the update url.
-  # If not, we will leave it empty.
-  # That way, the deSEC update server decides based on what it detects.
+  # If not, we will leave it empty. That way, the deSEC update server decides based on what it detects, if it should update or delete the record.
 
   if [ "$IPV4_UNDETECTABLE" = 'NO' ]; then
     UPDATE_URL="${UPDATE_URL}&myipv4=$IPV4"
