@@ -18,8 +18,9 @@ If you don't like that behavior for some reasons, you can set PRESERVE_IPV4 or P
 This will add the preserve option in the update URL and leave manually created records in the webGUI or stale records untouched. Because of that, it will also completly disable any checks for that procotol.
 
 If you want to disable IPv4 or IPv6, you can set DISABLE_IPV4 or DISABLE_IPV6 to "YES". The only thing this will do, is setting the preserve option to "YES", so it is mostly a setting for people that ignored the read me and how "preserve" works 😄.  
-**I highly recommend you set this to "YES" in case you really don't have IPv4 or IPv6 connection!**  
-Otherwise the script will not only get stuck for 10 seconds trying to get your IP, but also always issue an update command, since this might be needed to delete a stale record
+
+I highly recommend you set this to "YES" in case you really don't have IPv4 or IPv6 connection!  
+Otherwise the script will not only get stuck for 10 seconds trying to get your IP, but also always issue an update command, since this might be needed to delete a stale record.  
 
 Notes on IPv4:
 - This script is unable to detect if have a real, public routable IPv4 or if you suffer from [CG-NAT](https://github.com/jameskimmel/opinions_about_tech_stuff/blob/main/network%20stuff/CG-NAT.md)!
