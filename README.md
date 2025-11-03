@@ -20,7 +20,7 @@ This will add the preserve option in the update URL and leave manually created r
 If you want to disable IPv4 or IPv6, you can set DISABLE_IPV4 or DISABLE_IPV6 to "YES". The only thing this will do, is setting the preserve option to "YES", so it is mostly a setting for people that ignored the read me and how "preserve" works 😄
 
 Notes on IPv4:
-- This script is unable to detect if have a real public IP4 or if you suffer from [CG-NAT](https://github.com/jameskimmel/opinions_about_tech_stuff/blob/main/network%20stuff/CG-NAT.md)!
+- This script is unable to detect if have a real, public routable IPv4 or if you suffer from [CG-NAT](https://github.com/jameskimmel/opinions_about_tech_stuff/blob/main/network%20stuff/CG-NAT.md)!
 
 Notes on IPv6: 
 - Watch out for IPv6 privacy extensions. Your host might have multiple IPv6 but use the none static IPv6 privacy extension enabled IPv6 for this script instead of the static one.
