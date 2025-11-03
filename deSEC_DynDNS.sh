@@ -40,7 +40,9 @@ CHECK_IPV6_URL='https://checkipv6.dedyn.io'
 CHECK_IPV4_URL_BACKUP='https://checkipv4.salzmann.solutions'
 CHECK_IPV6_URL_BACKUP='https://checkipv6.salzmann.solutions'
 
-# You should not need to change anything below this line!
+###############################################################
+### You should not need to change anything below this line! ###
+###############################################################
 
 # Variables
 UPDATE_URL="https://update.dedyn.io/?hostname=$DOMAIN_NAME"
