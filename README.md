@@ -10,7 +10,7 @@ Feel free to contribute support for other environments, improvements, suggestion
 If you issue an update request to the deSEC update url, deSEC will try to detect what IPs you have and set them accordingly.    
 
 This script behaves differently. It first detects your IPs and checks if they are different from the current records.  
-If that is the case, it will **not** simply issue the update URL and let deSEC guess what IPs you have, instead it will issue the update URL **with the detected IPs coded in**.  
+If that is the case, it will **not** simply issue the update URL and let deSEC guess what IPs you have, instead it will issue the update URL with the detected IPs coded in.    
 
 If the script can't detect an IP, it will leave it empty. If it is empty and the deSEC update url also can't detect an IP, it will get deleted. This will even be the case for records you created manually in the webGUI. That way stale records will get deleted. This might even help you noticing that there is a problem, when for whatever reason your host lost its IPv4 or IPv6.  
 
