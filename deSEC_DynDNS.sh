@@ -67,13 +67,13 @@ fi
 
 # Check IPv4 (only if preserve is not set)
 if [ "$PRESERVE_IPV4" = 'NO' ]; then
-  IPV4=$($CURL_CMD -4 --connect-timeout 10 --max-time 10 "$CHECK_IPV4_URL")
+  IPV4=$($CURL_CMD -4 --connect-timeout 10 --max-time 10 --silent "$CHECK_IPV4_URL")
   CURL_EXIT=$?
 
   # If curl returned an error, we try the backup nameserver
   if [ $CURL_EXIT -ne 0 ]; then
     echo "Failed to get your IPv4 from $CHECK_IPV4_URL. Curl error: $CURL_EXIT. We try the backup URL." >&2
-    IPV4=$($CURL_CMD -4 --connect-timeout 10 --max-time 10 "$CHECK_IPV4_URL_BACKUP")
+    IPV4=$($CURL_CMD -4 --connect-timeout 10 --max-time 10 --silent "$CHECK_IPV4_URL_BACKUP")
     CURL_EXIT=$?
 
     # If curl again returned an error, we set IPv4 to undetected
@@ -112,13 +112,13 @@ fi
 
 # Check IPv6 (only if preserve is not set)
 if [ "$PRESERVE_IPV6" = 'NO' ]; then
-  IPV6=$($CURL_CMD -6 --connect-timeout 10 --max-time 10 "$CHECK_IPV6_URL")
+  IPV6=$($CURL_CMD -6 --connect-timeout 10 --max-time 10 --silent "$CHECK_IPV6_URL")
   CURL_EXIT=$?
 
   # If curl returned an error, we try the backup nameserver
   if [ $CURL_EXIT -ne 0 ]; then
     echo "Failed to get your IPv6 from $CHECK_IPV6_URL. Curl error: $CURL_EXIT. We try the backup URL." >&2
-    IPV6=$($CURL_CMD -6 --connect-timeout 10 --max-time 10 "$CHECK_IPV6_URL_BACKUP")
+    IPV6=$($CURL_CMD -6 --connect-timeout 10 --max-time 10 --silent "$CHECK_IPV6_URL_BACKUP")
     CURL_EXIT=$?
 
     # If curl again returned an error, we set IPv6 to undetected
@@ -171,7 +171,7 @@ if [ "$UPDATE_NEEDED" = 'YES' ]; then
   fi
 
   # Do the actual update
-  UPDATE_RESPONSE=$($CURL_CMD --connect-timeout 10 --max-time 10 --header "Authorization: Token $TOKEN" "$UPDATE_URL")
+  UPDATE_RESPONSE=$($CURL_CMD --connect-timeout 10 --max-time 10 --silent --header "Authorization: Token $TOKEN" "$UPDATE_URL")
   CURL_EXIT=$?
 
     if [ $CURL_EXIT -ne 0 ]; then
