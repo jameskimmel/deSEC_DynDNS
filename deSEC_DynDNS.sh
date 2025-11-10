@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Simple DynDNS script for deSEC.io.
-# Version 1.2
+# Version 1.3
 # https://github.com/jameskimmel/deSEC_DynDNS
 
 # Config:
@@ -81,7 +81,7 @@ RAND_NUM=$($OD_CMD -An -N2 -t u /dev/urandom | $AWK_CMD '{print $1}')
 RANDOM_DELAY=$((MIN_DELAY + RAND_NUM % (MAX_DELAY - MIN_DELAY + 1)))
 $SLEEP_CMD $RANDOM_DELAY
 
-# It the preserve option is enabled, we set the IP to 'preserve'
+# If the preserve option is enabled, we set the IP for the update URL to 'preserve'
 if [ "$PRESERVE_IPV4" != 'NO' ]; then
   IPV4='preserve'
 fi
@@ -127,9 +127,13 @@ if [ "$PRESERVE_IPV4" = 'NO' ]; then
 
   fi
 
-  # If the A record isn't what IPv4 we detected or if we found a record but could not determine
-  # our IPv4, we need an update.
-  if [ "$DNS_IPV4" != "$IPV4" ] || [ "$IPV4_UNDETECTABLE" = 'YES' ]; then
+  # If the IPv4 is undetectable, we only need to update if there is an existing A record.
+  if [ "$IPV4_UNDETECTABLE" = 'YES' ] && [ -n "$DNS_IPV4" ]; then
+    UPDATE_NEEDED='YES'
+  fi
+
+  # If the IPv4 is detectable, we only need to update if it differs from the A record.
+  if [ "$IPV4_UNDETECTABLE" = 'NO' ] && [ "$DNS_IPV4" != "$IPV4" ] ; then
     UPDATE_NEEDED='YES'
   fi
 
@@ -172,12 +176,15 @@ if [ "$PRESERVE_IPV6" = 'NO' ]; then
 
   fi
 
-  # If the AAAA record isn't what IPv6 we detected or if we found a record but could not establish
-  # our IPv6, we need an update.
-  if [ "$DNS_IPV6" != "$IPV6" ] || [ "$IPV6_UNDETECTABLE" = 'YES' ]; then
+  # If the IPv6 is undetectable, we only need to update if there is an existing AAAA.
+  if [ "$IPV6_UNDETECTABLE" = 'YES' ] && [ -n "$DNS_IPV6" ]; then
     UPDATE_NEEDED='YES'
   fi
 
+  # If the IPv6 is detectable, we only need to update if it differs from the AAAA record.
+  if [ "$IPV6_UNDETECTABLE" = 'NO' ] && [ "$DNS_IPV6" != "$IPV6" ] ; then
+    UPDATE_NEEDED='YES'
+  fi
 fi
 
 # If an update is needed, build the update URL
