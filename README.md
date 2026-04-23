@@ -40,19 +40,20 @@ chmod +x deSEC_DynDNS.sh
 ```
 
 ## Prepare on OPNsense:  
-Install os-bind in the webGUI under System -> Firmware -> Plugins
+Install os-bind in the webGUI under System -> Firmware -> Plugins. 
 After that, access the shell over ssh and enter:
 ```sh
 curl -o deSEC_DynDNS.sh https://raw.githubusercontent.com/jameskimmel/deSEC_DynDNS/refs/heads/main/deSEC_DynDNS.sh
 chmod +x deSEC_DynDNS.sh
 ```
 
-## Configure 
+## Get an ath token
 On [deSEC.io](https://desec.io), create your auth token.  
 
-Edit the domain and the token in the script with an editor you like. I use nano as an example.  
+## edit deSEC_DynDNS.sh
+Edit the domain and the token in the script with an editor you like. I use vi in this an example.  
 ```bash
-nano deSEC_DynDNS.sh
+vi deSEC_DynDNS.sh
 ```
 ### Command paths
 For Debian and Ubuntu the paths should already be correct.
@@ -67,6 +68,7 @@ To test your config, run the script:
 ```bash
 ./deSEC_DynDNS.sh
 ```
+remember that there is a random dealy, so you have to be patient before you see any output.  
 
 ## run it automatically
 Depending on your OS, there are different ways to repeatedly run your script.  
@@ -85,12 +87,11 @@ Append at the end of the file:
 **Don't forget the change the path to your home directory.**  
 
 ### OPNsense
-SSH into your OPNsense shell.  
-OPNsense does not have nano installed, so we use vi instead to edit files.  
+SSH into your OPNsense. Press "8" to enter the shell. Run:
 ```bash
 vi /usr/local/opnsense/service/conf/actions.d/actions_desecdyndns.conf
 ```
-press "i" to insert:
+insert:
 ```bash
 [run]
 command:/root/deSEC_DynDNS.sh
@@ -99,7 +100,7 @@ type:script
 message:run deSEC DynDNS
 description:deSEC DynDNS Update
 ```
-save and exit by pressing esc -> : -> wq -> enter
+save and exit
 
 restart configd (or even better, reboot OPNsense)
 ```bash
