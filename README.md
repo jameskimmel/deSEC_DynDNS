@@ -55,13 +55,13 @@ Edit the domain and the token in the script with an editor you like. I use vi in
 ```bash
 vi deSEC_DynDNS.sh
 ```
-### Command paths
-For Debian and Ubuntu the paths should already be correct.
-For OPNsense and macOS, you have to adjust them. 
-
-### Preserve option
-This will set the update URL for that IP to preserve, thus not create, modify or delete records for that IP protocol.  
-It will also disable checks for that protocol, since they are no longer needed in that case.  
+edit the file until you reach:
+```bash
+###############################################################
+### You should not need to change anything below this line! ###
+###############################################################
+```
+save and exit.  
 
 ## Test your config
 To test your config, run the script:  
