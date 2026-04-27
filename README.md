@@ -29,13 +29,13 @@ Notes on IPv6:
 ## Prepare Ubuntu/Debian:
 ```bash
 sudo apt install curl
-curl -o deSEC_DynDNS.sh https://raw.githubusercontent.com/jameskimmel/deSEC_DynDNS/refs/heads/main/deSEC_DynDNS.sh
+curl -o deSEC_DynDNS.sh https://raw.githubusercontent.com/jameskimmel/deSEC_DynDNS/refs/heads/main/deSEC_DynDNS_Linux.sh
 chmod +x deSEC_DynDNS.sh
 ```
 
 ## Prepare on macOS:
 ```bash
-curl -o deSEC_DynDNS.sh https://raw.githubusercontent.com/jameskimmel/deSEC_DynDNS/refs/heads/main/deSEC_DynDNS.sh
+curl -o deSEC_DynDNS.sh https://raw.githubusercontent.com/jameskimmel/deSEC_DynDNS/refs/heads/main/deSEC_DynDNS_macOS.sh
 chmod +x deSEC_DynDNS.sh
 ```
 
@@ -43,7 +43,7 @@ chmod +x deSEC_DynDNS.sh
 For OPNsense, we need to os-bind plugin. In the webGUI go to System -> Firmware -> Plugins. On the top right, enable the checkbox "Show community plugins" and install "os-bind".  
 After that, access the shell over ssh and enter:
 ```sh
-curl -o deSEC_DynDNS.sh https://raw.githubusercontent.com/jameskimmel/deSEC_DynDNS/refs/heads/main/deSEC_DynDNS.sh
+curl -o deSEC_DynDNS.sh https://raw.githubusercontent.com/jameskimmel/deSEC_DynDNS/refs/heads/main/deSEC_DynDNS_OPNsense.sh
 chmod +x deSEC_DynDNS.sh
 ```
 

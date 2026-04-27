@@ -1,25 +1,13 @@
 #!/bin/sh
 
 # Simple DynDNS script for deSEC.io.
-# Version 1.3
+# Version 1.4
 # https://github.com/jameskimmel/deSEC_DynDNS
 
 # Config:
 # Insert your domain name and the auth token.
 DOMAIN_NAME='InsertYourDomainHere'
 TOKEN='InsertYourTokenHere'
-
-# Paths:
-# For Debian and Ubuntu, paths should already be correct.
-# For OPNsense, dig and curl should be located at /usr/local/bin/ and sleep should be located at /bin/sleep
-# For macOS, sleep should be located at /bin/sleep
-# Use the command "which", to find out where these commands are located on your OS.
-DIG_CMD='/usr/bin/dig'
-CURL_CMD='/usr/bin/curl'
-SLEEP_CMD='/usr/bin/sleep'
-AWK_CMD='/usr/bin/awk'
-HEAD_CMD='/usr/bin/head'
-OD_CMD='/usr/bin/od'
 
 # Preserve:
 # This will set the update URL to preserve, therefore not touching your current record.
@@ -49,6 +37,14 @@ CHECK_IPV6_URL_BACKUP='https://checkipv6.salzmann.solutions'
 ###############################################################
 ### You should not need to change anything below this line! ###
 ###############################################################
+
+# Use the command "which", to find out where these commands are located on your OS.
+DIG_CMD='/usr/bin/dig'
+CURL_CMD='/usr/bin/curl'
+SLEEP_CMD='/usr/bin/sleep'
+AWK_CMD='/usr/bin/awk'
+HEAD_CMD='/usr/bin/head'
+OD_CMD='/usr/bin/od'
 
 # Variables
 UPDATE_URL="https://update.dedyn.io/?hostname=$DOMAIN_NAME"
