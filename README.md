@@ -88,7 +88,7 @@ crontab -e
 
 Append at the end of the file: 
 ```bash
-*/5 * * * * /home/YourUserName/deSEC_DynDNS.sh > /dev/null
+2-59/5 * * * * /home/YourUserName/deSEC_DynDNS.sh > /dev/null
 ```
 **Don't forget the change the path to your home directory.**  
 
