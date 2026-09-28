@@ -1,50 +1,58 @@
 # deSEC_DynDNS
 
-**deSEC_DynDNS** is a simple DynDNS script for [deSEC.io](https://desec.io) that updates your DNS records only when your IP address changes.  
+deSEC_DynDNS is a simple DynDNS script for [deSEC.io](https://desec.io) that only sends an update request, if your detected IPs differs from your records. This should help minimise stress on deSEC.io servers.  
 
-Tested on **Debian 12**, **Ubuntu 24.04.2 LTS**, **macOS 15.4.1**, and **OPNsense 25.1.5 (FreeBSD 14.2)**  
+Tested on Debian 12, Ubuntu 24.04.2 LTS, macOS 15.4.1, and OPNsense 25.1.5 (FreeBSD 14.2)  
 
-Feel free to contribute support for other environments, improvements, suggestions or correct my spelling mistakes :blush:    
+Feel free to contribute by opening an issue or pull request :blush:    
 
 ## Update logic
-If you issue an update request to the deSEC update url, deSEC servers will try to detect what IPs you have and set the records accordingly.   
+If you issue an update request to the deSEC update URL, deSEC servers will try to detect what IPs you have and set the records accordingly.   
 
 This script behaves a little bit different. First it detects your IPs. Then it checks if they are different from the current records. Only if that is the case, the script will continue to issue an update request. 
 It will **not** simply issue the update URL and let deSEC guess what IPs you have, instead it will issue the update URL with the detected IPs coded in. This makes the update request a little bit more robust and allows for custom settings.      
 
-If the script can't detect an IP, it will leave it empty. If it is empty and the deSEC update url also can't detect an IP, it will get deleted. This will even be the case for records you created manually in the webGUI. That way, a stale record will get deleted. This might even help you noticing that there is a problem, when for whatever reason your host lost its IPv4 or IPv6.  
+If the script can't detect an IP, it won't set it in the update URL. If the deSEC server also can't detect an IP, possible previous records will get deleted. This will even be the case for records you created manually in the web-GUI. That way, a stale record will get deleted. This might even help you noticing that there is a problem, when for whatever reason your host lost its IPv4 or IPv6.  
 
-If you don't like that behavior for some reasons, you can set PRESERVE_IPV4 or PRESERVE_IPV6 to "YES".  
-This will add the preserve option in the update URL and leave manually created records in the webGUI or stale records untouched. Because of that, it will also completly disable any checks for that procotol.  
+If you don't like that behaviour for some reasons, you can set PRESERVE_IPV4 or PRESERVE_IPV6 to "YES".  
+This will add the preserve option in the update URL and leave manually created records in the webGUI or stale records untouched. Because of that, it will also completely disable any checks for that protocol.  
 
-If you want to disable IPv4 or IPv6, you can set DISABLE_IPV4 or DISABLE_IPV6 to "YES". The only thing this will do, is setting the preserve option to "YES", so it is mostly a setting for people that ignored the README and how "preserve" works 😄.  
+If you want to disable IPv4 or IPv6, you can set DISABLE_IPV4 or DISABLE_IPV6 to "YES". This makes sense, if you have a static IP from your ISP and don't want to check for that.    
 
 Notes on IPv4:
-- This script is unable to detect if have a real, public routable IPv4 or if you suffer from [CG-NAT](https://github.com/jameskimmel/opinions_about_tech_stuff/blob/main/network%20stuff/CG-NAT.md)!
+- This script is unable to detect if have a real, publicly routable IPv4 or if you suffer from [CG-NAT](https://github.com/jameskimmel/opinions_about_tech_stuff/blob/main/network%20stuff/CG-NAT.md)!
 
 Notes on IPv6: 
 - Watch out for IPv6 privacy extensions. Your host might have multiple IPv6 and will use the none static IPv6 privacy extension enabled IPv6, instead of the static one.  
-- Almost all ISP offer you a static /56 or /48 prefix, so you most likely should not need DynDNS for IPv6. If you ISP does not offer that, it is not following RIPE recommendations and I would seriously consider switching your provider if possible.  
+- Almost all ISPs offer you a static /56 or /48 prefix, so you most likely should not need DynDNS for IPv6 and can disable it. If you ISP does not offer that, it is not following RIPE recommendations and I would seriously consider switching your provider if possible.  
 
 ## Prepare Ubuntu/Debian:
 ```bash
 sudo apt install curl
 curl -o deSEC_DynDNS.sh https://raw.githubusercontent.com/jameskimmel/deSEC_DynDNS/refs/heads/main/deSEC_DynDNS_Linux.sh
-chmod +x deSEC_DynDNS.sh
+chmod 700 deSEC_DynDNS.sh
 ```
 
 ## Prepare on macOS:
 ```bash
 curl -o deSEC_DynDNS.sh https://raw.githubusercontent.com/jameskimmel/deSEC_DynDNS/refs/heads/main/deSEC_DynDNS_macOS.sh
-chmod +x deSEC_DynDNS.sh
+chmod 700 deSEC_DynDNS.sh
 ```
 
 ## Prepare on OPNsense:  
 Access the shell over ssh and enter:
 ```sh
 curl -o deSEC_DynDNS.sh https://raw.githubusercontent.com/jameskimmel/deSEC_DynDNS/refs/heads/main/deSEC_DynDNS_OPNsense.sh
-chmod +x deSEC_DynDNS.sh
+chmod 700 deSEC_DynDNS.sh
 ```
+
+## software requirements:  
+This script makes use of these programs:
+- dig
+- curl
+- head
+  
+make sure you have them installed.  
 
 ## Get an ath token
 On [deSEC.io](https://desec.io), create your auth token.  
@@ -67,11 +75,10 @@ To test your config, run the script:
 ```bash
 ./deSEC_DynDNS.sh
 ```
-remember that there is a random dealy, so you have to be patient before you see any output.  
 
 ## run it automatically
 Depending on your OS, there are different ways to repeatedly run your script.  
-In these examples, we use a 5min intervall.  
+In these examples, we use a 5min interval.  
 
 ### Linux
 Create a cronjob:  
