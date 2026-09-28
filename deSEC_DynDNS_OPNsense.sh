@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Simple DynDNS script for deSEC.io.
-# Version 1.4
+# Version 1.5
 # https://github.com/jameskimmel/deSEC_DynDNS
 
 # Config:
@@ -41,10 +41,7 @@ CHECK_IPV6_URL_BACKUP='https://checkipv6.salzmann.solutions'
 # Use the command "which", to find out where these commands are located on your OS.
 DIG_CMD='/usr/local/bin/dig'
 CURL_CMD='/usr/local/bin/curl'
-SLEEP_CMD='/bin/sleep'
-AWK_CMD='/usr/bin/awk'
 HEAD_CMD='/usr/bin/head'
-OD_CMD='/usr/bin/od'
 
 # Variables
 UPDATE_URL="https://update.dedyn.io/?hostname=$DOMAIN_NAME"
@@ -68,14 +65,6 @@ if [ "$PRESERVE_IPV4" != 'NO' ] && [ "$PRESERVE_IPV6" != 'NO' ]; then
   echo "Both IPv4 and IPv6 are set to \"preserved\" or to \"disabled\". That makes no sense. Exiting script."
       exit 1
 fi
-
-# To not overwhelm deSEC servers all at the same time
-# we add a random delay. By using a delay between 10 and 290 seconds, we have at least a 10-second delay to the 5m mark.
-MIN_DELAY=10
-MAX_DELAY=290
-RAND_NUM=$($OD_CMD -An -N2 -t u /dev/urandom | $AWK_CMD '{print $1}')
-RANDOM_DELAY=$((MIN_DELAY + RAND_NUM % (MAX_DELAY - MIN_DELAY + 1)))
-$SLEEP_CMD $RANDOM_DELAY
 
 # If the preserve option is enabled, we set the IP for the update URL to 'preserve'
 if [ "$PRESERVE_IPV4" != 'NO' ]; then
